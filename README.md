@@ -6,4 +6,6 @@ Redo previous project (https://github.com/waiky8/uk-schools-view) but this time 
   - post16: average A-level grade
 
 Sample.<br>
-![alt text](https://github.com/waiky8/simple-image-editor/blob/master/screenshots/screenshot1.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_2.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_3.png)
