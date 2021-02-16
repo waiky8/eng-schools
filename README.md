@@ -4,3 +4,6 @@ Redo previous project (https://github.com/waiky8/uk-schools-view) but this time 
   - primary: reading, writing & maths
   - secondary: progress 8, attainment 8, Eng / maths passes
   - post16: average A-level grade
+
+Sample.<br>
+![alt text](https://github.com/waiky8/simple-image-editor/blob/master/screenshots/screenshot1.png)
