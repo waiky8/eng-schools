@@ -5,7 +5,7 @@ Redo previous project (https://github.com/waiky8/uk-schools-view) but this time 
   - secondary: progress 8, attainment 8, Eng / maths passes
   - post16: average A-level grade
 
-Check out at https://eng-schools.herokuapp.com/
+Check out https://eng-schools.herokuapp.com/
 
 Sample.<br>
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.png)
