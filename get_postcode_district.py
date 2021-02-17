@@ -7,7 +7,7 @@ def main():
     start_time = time.time()
 
     for f in ["england_ks2final.csv", "england_ks4final.csv", "england_ks5final.csv"]:
-        df = pd.read_csv(f, engine="python")
+        df = pd.read_csv(f)
 
         district = []
 
