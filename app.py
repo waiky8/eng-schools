@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_table
+import dash_daq as daq
 import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
@@ -53,15 +54,7 @@ df_eng_avg = pd.read_csv("england_gcse_alevel_averages.csv")
 school_list1 = sorted([str(d) for d in df_pri["SCHNAME"].unique()])
 school_list2 = sorted([str(d) for d in df_sec["SCHNAME"].unique()])
 school_list3 = sorted([str(d) for d in df_p16["SCHNAME"].unique()])
-school_list = []
-for i in school_list1:
-    school_list.append(i)
-for i in school_list2:
-    if i not in school_list:
-        school_list.append(i)
-for i in school_list3:
-    if i not in school_list:
-        school_list.append(i)
+school_list = school_list1 + school_list2 + school_list3
 school_list.sort()
 
 town_list = sorted([str(d) for d in df_pri["TOWN"].unique()])
@@ -81,7 +74,8 @@ df_pri = df_pri.rename(columns=
     "MATPROG_DESCR": "Maths",
     "OFSTEDRATING": "Ofsted",
     "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website"
+    "WEB": "Website",
+    "SCHTYPE": "School Type"
 }
 )
 
@@ -98,7 +92,9 @@ df_sec = df_sec.rename(columns=
     "EBACCAPS": "EBacc Score",
     "OFSTEDRATING": "Ofsted",
     "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website"
+    "WEB": "Website",
+    "SCHTYPE": "School Type",
+    "GRAMMAR": "Grammar"
 }
 )
 
@@ -113,7 +109,8 @@ df_p16 = df_p16.rename(columns=
     "TALLPPE_ALEV_1618": "Average Points",
     "OFSTEDRATING": "Ofsted",
     "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website"
+    "WEB": "Website",
+    "SCHTYPE": "School Type"
 }
 )
 
@@ -162,13 +159,242 @@ app.layout = html.Div(
 
         html.Br(),
 
-        dbc.Row(dbc.Col(html.P(
-            "📗✏️📐👨‍🎓 Score: ⭐⭐⭐⭐⭐ Well Above Average | ⭐⭐⭐⭐ Above Average | ⭐⭐⭐ Average | ⭐⭐ Below Average | ⭐ Well Below Average"
-        ), style={"text-align": "left", "font-weight": "bold", "padding": "0px 20px 0px 20px"})),
+        dbc.Row(
+            [
+                html.Div(
+                    [
+                        dbc.Button(
+                            "Legend",
+                            id="legend-button",
+                            className="mb-3",
+                            color="primary",
+                        ),
+                        dbc.Collapse(
+                            dbc.Card(dbc.CardBody(
+                                [
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("📗✏️📐👨‍🎓 Score:"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
 
-        dbc.Row(dbc.Col(html.P(
-            "🏫Ofsted: 🎓🎓🎓🎓🎓 Outstanding | 🎓🎓🎓🎓 Good | 🎓🎓🎓 Satisfactory | 🎓🎓 Requires Improvement | 🎓 Inadequate"
-        ), style={"text-align": "left", "font-weight": "bold", "padding": "0px 20px 0px 20px"})),
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🏫Ofsted:"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            )
+                                        ]
+                                    ),
+
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("⭐⭐⭐⭐⭐"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Well Above Average"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🎓🎓🎓🎓🎓"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Outstanding"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            )
+                                        ]
+                                    ),
+
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("⭐⭐⭐⭐"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Above Average"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🎓🎓🎓🎓"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Good"),
+                                                style={"text-align": "left", "font-weight": "bold",}
+                                            )
+                                        ]
+                                    ),
+
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("⭐⭐⭐"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Average"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🎓🎓🎓"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Satisfactory"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            )
+                                        ]
+                                    ),
+
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("⭐⭐"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Below Average"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🎓🎓"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Requires Improvement"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            )
+                                        ]
+                                    ),
+
+                                    dbc.Row(
+                                        [
+                                            dbc.Col(
+                                                html.P("⭐"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Well Below Average"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P(""),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("🎓"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            ),
+
+                                            dbc.Col(
+                                                html.P("Inadequate"),
+                                                style={"text-align": "left", "font-weight": "bold"}
+                                            )
+                                        ]
+                                    ),
+
+                                    html.Br(),
+                                    html.Br(),
+
+                                    html.P(
+                                        "LOWCOV = Low coverage: shown for the ‘value added’ measure and coverage indicator where schools have less than 50% of pupils included in calculation of the measure",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "NA = Not applicable: figures are either not available for the year in question, or the data field is not applicable to the school or college",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "NE = No entries: the school or college did not enter any pupils or students for the qualifications covered by the measure",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "NEW = New school or college",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "NP = Not published: for example, we do not publish Progress 8 data for independent schools and independent special schools, or breakdowns by disadvantaged and other pupils for independent schools, independent special schools and non-maintained special schools",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "SP = Small percentage: the number is between 0% and 0.5%",
+                                        className="card-text"
+                                    ),
+                                    html.P(
+                                        "SUPP = Suppressed: in certain circumstances we will suppress an establishment's data. This is usually when there are 5 or fewer pupils or students covered by the measure (29 for apprenticeships measures). We avoid making these figures public to protect individual privacy. We may also suppress data on a case-by-case basis.",
+                                        className="card-text"
+                                    ),
+                                ]
+                            )
+                            ),
+                            id="legend",
+                        )
+                    ],
+                    style={"width": "90%", "padding": "0px 0px 0px 50px"},
+                ),
+
+                html.Div(dbc.Row(
+                    [
+                        daq.ToggleSwitch(
+                            id="toggle_switch",
+                            label="Grammar School",
+                            labelPosition="bottom",
+                            color="steelblue",
+                            size=80,
+                            value=False
+                        )
+                    ]
+                ),
+                    style={"width": "10%", "padding": "0px 50px 0px 0px"}
+                )
+            ]
+        ),
+
+        html.Br(),
+        html.Br(),
 
         dcc.Tabs(
             [
@@ -201,11 +427,6 @@ app.layout = html.Div(
                                             "type": "text"
                                         },
                                         {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        },
-                                        {
                                             "id": "Reading",
                                             "name": ["📗Reading"],
                                             "type": "text"
@@ -229,41 +450,53 @@ app.layout = html.Div(
                                             "id": "Last Inspected",
                                             "name": ["Last Inspected"],
                                             "type": "datetime"
+                                        },
+                                        {
+                                            "id": "URN",
+                                            "name": ["URN"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "School Type",
+                                            "name": ["School Type"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "Post Code",
+                                            "name": ["Post Code"],
+                                            "type": "text"
                                         }
                                     ],
-                                    merge_duplicate_headers=True,
+
                                     sort_action="native",  # native / none
                                     sort_mode="single",  # single / multi
                                     filter_action="none",  # native / none
                                     page_action="native",  # native / none
                                     page_current=0,  # current page number
                                     page_size=datatable_rows,  # rows per page
-                                    fill_width=True,
+                                    fixed_columns={'headers': True, 'data': 2},
+
+                                    style_table={"overflowX": "auto", "overflowY": "auto",
+                                                 "minWidth": "100%",
+                                                 "height": "500px"},
+                                    style_header={"color": "white", "backgroundColor": textcol},
+                                    fixed_rows={"headers": True},
                                     style_cell={
-                                        # ensure adequate header width when text is shorter than cell's text
-                                        "minWidth": 95, "maxWidth": 95, "width": 95,
-                                        "backgroundColor": bgcol,
                                         "color": textcol,
+                                        "backgroundColor": bgcol,
                                         "font-family": "Verdana",
-                                        # "fontWeight": "bold",
                                         "font_size": fontsize,
-                                        "height": "30px",
-                                        "maxWidth": "500px",
-                                        "padding": "00px 10px 0px 10px"
+                                        "overflow": "hidden",
+                                        "textOverflow": "ellipsis",
+                                        "minWidth": 160,
+                                        "maxWidth": 380,
+                                        "padding": "0px 10px 0px 10px"
                                     },
                                     style_cell_conditional=[
-                                        {"if": {"column_id": "Row"},
-                                         "width": "5%"},
+                                        {"if": {"column_id": c}, "textAlign": "left"}
+                                        for c in ["School", "Town", "Post Code"]
                                     ],
-                                    fixed_rows={"headers": True},
-                                    style_data={  # wrap long cell content into multiple lines
-                                        "whiteSpace": "normal",
-                                        "height": "auto"
-                                    },
-                                    style_table={"overflowX": "auto", "overflowY": "auto"},  # "height": "500px",
-                                    css=[{"selector": ".row", "rule": "margin: 0"}],  # fix text clipping issue
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    style_as_list_view=True
+                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
                                 )
                             ], style={"padding": "0px 20px 0px 20px"}
                         )
@@ -373,11 +606,6 @@ app.layout = html.Div(
                                             "type": "text"
                                         },
                                         {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        },
-                                        {
                                             "id": "Prog 8 Band",
                                             "name": ["👨‍🎓Progress 8"],
                                             "type": "text"
@@ -411,31 +639,58 @@ app.layout = html.Div(
                                             "id": "Last Inspected",
                                             "name": ["Last Inspected"],
                                             "type": "text"
+                                        },
+                                        {
+                                            "id": "URN",
+                                            "name": ["URN"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "School Type",
+                                            "name": ["School Type"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "Grammar",
+                                            "name": ["Grammar"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "Post Code",
+                                            "name": ["Post Code"],
+                                            "type": "text"
                                         }
                                     ],
-                                    merge_duplicate_headers=True,
+
                                     sort_action="native",  # native / none
                                     sort_mode="single",  # single / multi
                                     filter_action="none",  # native / none
                                     page_action="native",  # native / none
                                     page_current=0,  # current page number
                                     page_size=datatable_rows,  # rows per page
-                                    fill_width=True,
+                                    fixed_columns={'headers': True, 'data': 2},
+
+                                    style_table={"overflowX": "auto", "overflowY": "auto",
+                                                 "minWidth": "100%",
+                                                 "height": "500px"},
+
+                                    style_header={"color": "white", "backgroundColor": textcol},
+                                    fixed_rows={"headers": True},
                                     style_cell={
-                                        # ensure adequate header width when text is shorter than cell's text
-                                        "minWidth": 95, "maxWidth": 95, "width": 95,
-                                        "backgroundColor": bgcol,
                                         "color": textcol,
+                                        "backgroundColor": bgcol,
                                         "font-family": "Verdana",
-                                        # "fontWeight": "bold",
                                         "font_size": fontsize,
-                                        "height": "30px",
-                                        "maxWidth": "500px",
-                                        "padding": "00px 10px 0px 10px"
+                                        "overflow": "hidden",
+                                        "textOverflow": "ellipsis",
+                                        "minWidth": 160,
+                                        "maxWidth": 380,
+                                        "padding": "0px 10px 0px 10px"
                                     },
                                     style_cell_conditional=[
-                                        {"if": {"column_id": "Row"},
-                                         "width": "5%"},
+                                        {"if": {"column_id": "School"}, "textAlign": "left"},
+                                        {"if": {"column_id": "Town"}, "textAlign": "left"},
+                                        {"if": {"column_id": "Post Code"}, "textAlign": "left"},
                                         {"if": {"column_id": "Attainment 8"},
                                          "color": "white",
                                          "backgroundColor": col_1},
@@ -449,15 +704,7 @@ app.layout = html.Div(
                                          "color": "white",
                                          "backgroundColor": col_4}
                                     ],
-                                    fixed_rows={"headers": True},
-                                    style_data={  # wrap long cell content into multiple lines
-                                        "whiteSpace": "normal",
-                                        "height": "auto"
-                                    },
-                                    style_table={"overflowX": "auto", "overflowY": "auto"},  # "height": "500px",
-                                    css=[{"selector": ".row", "rule": "margin: 0"}],  # fix text clipping issue
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    style_as_list_view=True
+                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
                                 )
                             ], style={"padding": "0px 20px 0px 20px"}
                         )
@@ -533,11 +780,6 @@ app.layout = html.Div(
                                             "type": "text"
                                         },
                                         {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        },
-                                        {
                                             "id": "Prog Band",
                                             "name": ["👨‍🎓Progress"],
                                             "type": "text"
@@ -561,31 +803,53 @@ app.layout = html.Div(
                                             "id": "Last Inspected",
                                             "name": ["Last Inspected"],
                                             "type": "text"
+                                        },
+                                        {
+                                            "id": "URN",
+                                            "name": ["URN"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "School Type",
+                                            "name": ["School Type"],
+                                            "type": "text"
+                                        },
+                                        {
+                                            "id": "Post Code",
+                                            "name": ["Post Code"],
+                                            "type": "text"
                                         }
                                     ],
-                                    merge_duplicate_headers=True,
+
                                     sort_action="native",  # native / none
                                     sort_mode="single",  # single / multi
                                     filter_action="none",  # native / none
                                     page_action="native",  # native / none
                                     page_current=0,  # current page number
                                     page_size=datatable_rows,  # rows per page
-                                    fill_width=True,
+                                    fixed_columns={'headers': True, 'data': 2},
+
+                                    style_table={"overflowX": "auto", "overflowY": "auto",
+                                                 "minWidth": "100%",
+                                                 "height": "500px"},
+
+                                    style_header={"color": "white", "backgroundColor": textcol},
+                                    fixed_rows={"headers": True},
                                     style_cell={
-                                        # ensure adequate header width when text is shorter than cell's text
-                                        "minWidth": 95, "maxWidth": 95, "width": 95,
-                                        "backgroundColor": bgcol,
                                         "color": textcol,
+                                        "backgroundColor": bgcol,
                                         "font-family": "Verdana",
-                                        # "fontWeight": "bold",
                                         "font_size": fontsize,
-                                        "height": "30px",
-                                        "maxWidth": "500px",
-                                        "padding": "00px 10px 0px 10px"
+                                        "overflow": "hidden",
+                                        "textOverflow": "ellipsis",
+                                        "minWidth": 160,
+                                        "maxWidth": 380,
+                                        "padding": "0px 10px 0px 10px"
                                     },
                                     style_cell_conditional=[
-                                        {"if": {"column_id": "Row"},
-                                         "width": "5%"},
+                                        {"if": {"column_id": "School"}, "textAlign": "left"},
+                                        {"if": {"column_id": "Town"}, "textAlign": "left"},
+                                        {"if": {"column_id": "Post Code"}, "textAlign": "left"},
                                         {"if": {"column_id": "Average Grade"},
                                          "color": "white",
                                          "backgroundColor": col_5},
@@ -593,15 +857,7 @@ app.layout = html.Div(
                                          "color": "white",
                                          "backgroundColor": col_6}
                                     ],
-                                    fixed_rows={"headers": True},
-                                    style_data={  # wrap long cell content into multiple lines
-                                        "whiteSpace": "normal",
-                                        "height": "auto"
-                                    },
-                                    style_table={"overflowX": "auto", "overflowY": "auto"},  # "height": "500px",
-                                    css=[{"selector": ".row", "rule": "margin: 0"}],  # fix text clipping issue
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    style_as_list_view=True
+                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
                                 )
                             ], style={"padding": "0px 20px 0px 20px"}
                         )
@@ -619,22 +875,27 @@ app.layout = html.Div(
                 ),
 
         dbc.Row(html.Label(["Data Source: ",
-                            html.A("GovUK", href="https://www.compare-school-performance.service.gov.uk/download-data", target="_blank")]),
+                            html.A("GovUK",
+                                   href="https://www.compare-school-performance.service.gov.uk/download-data",
+                                   target="_blank")]),
                 style={"padding": "0px 0px 0px 50px"}
                 ),
 
         dbc.Row(html.Label(["Code: ",
-                            html.A("Github", href="https://github.com/waiky8/eng-schools", target="_blank")]),
+                            html.A("Github", href="https://github.com/waiky8/eng-schools",
+                                   target="_blank")]),
                 style={"padding": "0px 0px 0px 50px"}
                 ),
 
-        html.Div(id="dummy", children=[], style={"display": "none"})  # dummy DIV to trigger totals_timeline callback
+        html.Div(id="dummy", children=[],
+                 style={"display": "none"})  # dummy DIV to trigger totals_timeline callback
     ]
 )
 
 
 # Data Table ----------
 @app.callback(
+
     [
         Output("datatable_pri", "data"),
         Output("datatable_sec", "data"),
@@ -643,11 +904,12 @@ app.layout = html.Div(
     [
         Input("school_drop", "value"),
         Input("town_drop", "value"),
-        Input("postcode_drop", "value")
+        Input("postcode_drop", "value"),
+        Input("toggle_switch", "value")
     ]
 )
-def update_datatable(selected_school, selected_area, selected_postcode):
-    # Check for school filter entered
+def update_datatable(selected_school, selected_area, selected_postcode, selected_grammar_sch):
+    # Check for selected school filter
     if (selected_school is None or selected_school == []):
         df1a = df_tbl_pri
         df2a = df_tbl_sec
@@ -657,7 +919,7 @@ def update_datatable(selected_school, selected_area, selected_postcode):
         df2a = df_sec[df_sec["School"].isin(selected_school)]
         df3a = df_p16[df_p16["School"].isin(selected_school)]
 
-    # Check for town filter entered
+    # Check for selected town filter
     if (selected_area is None or selected_area == []):
         df1b = df1a
         df2b = df2a
@@ -667,7 +929,7 @@ def update_datatable(selected_school, selected_area, selected_postcode):
         df2b = df2a[df2a["Town"].isin(selected_area)]
         df3b = df3a[df3a["Town"].isin(selected_area)]
 
-    # Check for postcode filter entered
+    # Check for selected postcode filter
     if (selected_postcode is None or selected_postcode == []):
         df1c = df1b
         df2c = df2b
@@ -676,6 +938,12 @@ def update_datatable(selected_school, selected_area, selected_postcode):
         df1c = df1b[df1b["PCODE2"].isin(selected_postcode)]
         df2c = df2b[df2b["PCODE2"].isin(selected_postcode)]
         df3c = df3b[df3b["PCODE2"].isin(selected_postcode)]
+
+    # Check for selected grammar school filter
+    if selected_grammar_sch == False:
+        pass
+    else:
+        df2c = df2c[df2c["Grammar"].isin(["Yes"])]
 
     df1_pri = df1c.copy().sort_values(by=["School"])
     # Refresh row no.
@@ -778,6 +1046,17 @@ def update_cards(selected_school):
     alevel_score = df_eng_avg["ALSCORE"][0]
 
     return gcse_att8, gcse_eng_maths_grade5, gcse_enter_ebaccs, gcse_ebaccs_score, alevel_grade, alevel_score
+
+
+@app.callback(
+    Output("legend", "is_open"),
+    [Input("legend-button", "n_clicks")],
+    [State("legend", "is_open")],
+)
+def legend(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 
 if __name__ == "__main__":
