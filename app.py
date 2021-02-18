@@ -110,7 +110,8 @@ df_p16 = df_p16.rename(columns=
     "OFSTEDRATING": "Ofsted",
     "INSPECTIONDT": "Last Inspection",
     "WEB": "Website",
-    "SCHTYPE": "School Type"
+    "SCHTYPE": "School Type",
+    "GRAMMAR": "Grammar"
 }
 )
 
@@ -176,17 +177,16 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("📗✏️📐👨‍🎓 Score:"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🏫Ofsted:"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             )
                                         ]
                                     ),
@@ -195,27 +195,26 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("⭐⭐⭐⭐⭐"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Well Above Average"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🎓🎓🎓🎓🎓"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Outstanding"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             )
                                         ]
                                     ),
@@ -224,27 +223,26 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("⭐⭐⭐⭐"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Above Average"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🎓🎓🎓🎓"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Good"),
-                                                style={"text-align": "left", "font-weight": "bold",}
+                                                style={"font-weight": "bold", }
                                             )
                                         ]
                                     ),
@@ -253,27 +251,26 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("⭐⭐⭐"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Average"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🎓🎓🎓"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Satisfactory"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             )
                                         ]
                                     ),
@@ -282,27 +279,26 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("⭐⭐"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Below Average"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🎓🎓"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Requires Improvement"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             )
                                         ]
                                     ),
@@ -311,27 +307,26 @@ app.layout = html.Div(
                                         [
                                             dbc.Col(
                                                 html.P("⭐"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Well Below Average"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
-                                                html.P(""),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                html.P("")
                                             ),
 
                                             dbc.Col(
                                                 html.P("🎓"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             ),
 
                                             dbc.Col(
                                                 html.P("Inadequate"),
-                                                style={"text-align": "left", "font-weight": "bold"}
+                                                style={"font-weight": "bold"}
                                             )
                                         ]
                                     ),
@@ -488,7 +483,7 @@ app.layout = html.Div(
                                         "font_size": fontsize,
                                         "overflow": "hidden",
                                         "textOverflow": "ellipsis",
-                                        "minWidth": 160,
+                                        "minWidth": 180,
                                         "maxWidth": 380,
                                         "padding": "0px 10px 0px 10px"
                                     },
@@ -611,6 +606,11 @@ app.layout = html.Div(
                                             "type": "text"
                                         },
                                         {
+                                            "id": "Progress 8",
+                                            "name": ["Progress 8 Score"],
+                                            "type": "text"
+                                        },
+                                        {
                                             "id": "Attainment 8",
                                             "name": ["Attainment 8 Score"],
                                             "type": "text"
@@ -683,7 +683,7 @@ app.layout = html.Div(
                                         "font_size": fontsize,
                                         "overflow": "hidden",
                                         "textOverflow": "ellipsis",
-                                        "minWidth": 160,
+                                        "minWidth": 180,
                                         "maxWidth": 380,
                                         "padding": "0px 10px 0px 10px"
                                     },
@@ -815,6 +815,11 @@ app.layout = html.Div(
                                             "type": "text"
                                         },
                                         {
+                                            "id": "Grammar",
+                                            "name": ["Grammar"],
+                                            "type": "text"
+                                        },
+                                        {
                                             "id": "Post Code",
                                             "name": ["Post Code"],
                                             "type": "text"
@@ -842,7 +847,7 @@ app.layout = html.Div(
                                         "font_size": fontsize,
                                         "overflow": "hidden",
                                         "textOverflow": "ellipsis",
-                                        "minWidth": 160,
+                                        "minWidth": 180,
                                         "maxWidth": 380,
                                         "padding": "0px 10px 0px 10px"
                                     },
@@ -944,6 +949,7 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         df2c = df2c[df2c["Grammar"].isin(["Yes"])]
+        df3c = df3c[df3c["Grammar"].isin(["Yes"])]
 
     df1_pri = df1c.copy().sort_values(by=["School"])
     # Refresh row no.

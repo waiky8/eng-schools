@@ -8,21 +8,21 @@ df_grammar = pd.read_csv("grammar_schools.csv")
 def main():
     start_time = time.time()
 
-    f = "england_ks4final.csv"
+    for f in ["england_ks4final.csv", "england_ks5final.csv"]:
 
-    df = pd.read_csv(f)
+        df = pd.read_csv(f)
 
-    grammar = []
+        grammar = []
 
-    for r in range(0, len(df)):
-        urn = str(df["URN"][r]).split(".")[0]
-        g = get_grammar(urn)
-        grammar.append(g)
+        for r in range(0, len(df)):
+            urn = str(df["URN"][r]).split(".")[0]
+            g = get_grammar(urn)
+            grammar.append(g)
 
-        print(r, urn, g)
+            print(r, urn, g)
 
-    df["GRAMMAR"] = grammar
-    df.to_csv(f, index=False, encoding="utf-8")
+        df["GRAMMAR"] = grammar
+        df.to_csv(f, index=False, encoding="utf-8")
 
     elapsed_time = time.time() - start_time
     print("\n", datetime.timedelta(seconds=elapsed_time))
