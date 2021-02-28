@@ -4,20 +4,24 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_table
-import dash_daq as daq
 import pandas as pd
+from datetime import datetime
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO],
+                meta_tags=[
+                    {"name": "viewport",
+                     "content": "width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,"
+                     }
+                ]
+                )
 server = app.server
 app.title = "ENG Schools"
 
 # App parameters
-topn = 10  # Show highest n values
-chart_h = 500  # height of charts
-datatable_rows = 100
+datatable_rows = 10
 textcol = "steelblue"  # text colour
-bgcol = "black"  # background colour of charts, table etc.
-fontsize = 16
+bgcol = "white"  # background colour of charts, table etc.
+fontsize = 14
 
 col_1 = "royalblue"
 col_2 = "slategrey"
@@ -26,19 +30,39 @@ col_4 = "cornflowerblue"
 col_5 = "darkmagenta"
 col_6 = "slateblue"
 
-tabs_styles = {
-    "height": "40px"
-}
-tab_style = {
-    "color": "grey",
-    "fontWeight": "bold"
-}
+markdown_table = """
+|Star|Rating|
+|:-------------|:-------------|
+|⭐⭐⭐⭐⭐|Well Above Average|
+|⭐⭐⭐⭐|Above Average|
+|⭐⭐⭐|Average|
+|⭐⭐|Below Average|
+|⭐|Well Below Average|
+"""
 
-tab_selected_style = {
-    "color": "white",
-    "backgroundColor": "royalblue",
-    "fontWeight": "bold"
-}
+markdown_table2 = """
+|Abbr|Meaning|
+|:-------------|:-------------|
+|LOWCONV|Low Coverage|
+|NA|Not Applicable|
+|NE|No Entries|
+|NEW|New School|
+|NP|Not Published|
+|SP|Small Percentage|
+|SUPP|Suppressed|
+"""
+
+new_row_pri = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "READPROG": "",
+               "READPROG_DESCR": "", "WRITPROG": "", "WRITPROG_DESCR": "", "MATPROG": "", "MATPROG_DESCR": "",
+               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": ""}
+
+new_row_sec = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "P8MEA": "",
+               "P8_BANDING": "", "ATT8SCR": "", "PTL2BASICS_95": "", "EBACCAPS": "", "PTEBACC_E_PTQ_EE": "",
+               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GRAMMAR": ""}
+
+new_row_p16 = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "VA_INS_ALEV": "",
+               "PROGRESS_BAND_ALEV": "", "TALLPPE_ALEV_1618": "", "TALLPPEGRD_ALEV_1618": "", "OFSTEDRATING": "",
+               "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GRAMMAR": ""}
 
 df = pd.read_csv("england_ks2final.csv")
 df_pri = df[df["RECTYPE"].isin(["1", "2"])]  # mainstream & special schools
@@ -60,60 +84,9 @@ school_list.sort()
 town_list = sorted([str(d) for d in df_pri["TOWN"].unique()])
 postcode_list = sorted([str(d) for d in df_pri["PCODE2"].unique()])
 
-# Rename columns
-df_pri = df_pri.rename(columns=
-{
-    "SCHNAME": "School",
-    "TOWN": "Town",
-    "PCODE": "Post Code",
-    "READPROG": "Reading Score",
-    "READPROG_DESCR": "Reading",
-    "WRITPROG": "Writing Score",
-    "WRITPROG_DESCR": "Writing",
-    "MATPROG": "Maths Score",
-    "MATPROG_DESCR": "Maths",
-    "OFSTEDRATING": "Ofsted",
-    "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website",
-    "SCHTYPE": "School Type"
-}
-)
-
-df_sec = df_sec.rename(columns=
-{
-    "SCHNAME": "School",
-    "TOWN": "Town",
-    "PCODE": "Post Code",
-    "P8MEA": "Progress 8",
-    "P8_BANDING": "Prog8",
-    "ATT8SCR": "Attainment 8",
-    "PTL2BASICS_95": "Eng Maths Grade 5+",
-    "PTEBACC_E_PTQ_EE": "Entering EBacc",
-    "EBACCAPS": "EBacc Score",
-    "OFSTEDRATING": "Ofsted",
-    "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website",
-    "SCHTYPE": "School Type",
-    "GRAMMAR": "Grammar"
-}
-)
-
-df_p16 = df_p16.rename(columns=
-{
-    "SCHNAME": "School",
-    "TOWN": "Town",
-    "PCODE": "Post Code",
-    "VA_INS_ALEV": "Progress Score",
-    "PROGRESS_BAND_ALEV": "Prog_Band",
-    "TALLPPEGRD_ALEV_1618": "Average Grade",
-    "TALLPPE_ALEV_1618": "Average Points",
-    "OFSTEDRATING": "Ofsted",
-    "INSPECTIONDT": "Last Inspection",
-    "WEB": "Website",
-    "SCHTYPE": "School Type",
-    "GRAMMAR": "Grammar"
-}
-)
+pri_recs = len(df_pri.index)
+sec_recs = len(df_sec.index)
+p16_recs = len(df_p16.index)
 
 df_tbl_pri = df_pri.copy()
 df_tbl_sec = df_sec.copy()
@@ -122,762 +95,662 @@ df_tbl_p16 = df_p16.copy()
 # Layout ----------
 app.layout = html.Div(
     [
-        dbc.Row(dbc.Col(html.H1("ENG Schools (2018/19)"), style={"text-align": "center", "font-weight": "bold"})),
+        dbc.Row(dbc.Col(html.H1("ENG Schools"), style={"text-align": "center", "font-weight": "bold"})),
+
+        dbc.Row(dbc.Col(html.H3("(2018/19)"), style={"text-align": "center", "font-weight": "bold"})),
+
+        html.Br(),
+
+        dbc.Col(dcc.Dropdown(
+            id="school_drop",
+            options=[{"label": i, "value": i} for i in school_list],
+            multi=True,
+            placeholder="Select School",
+            style={"font-size": fontsize, "color": "black", "background-color": "white"}
+        ), style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        html.Br(),
+
+        dbc.Col(dcc.Dropdown(
+            id="town_drop",
+            options=[{"label": i, "value": i} for i in town_list],
+            multi=True,
+            placeholder="Select Town",
+            style={"font-size": fontsize, "color": "black", "background-color": "white"}
+        ), style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        html.Br(),
+
+        dbc.Col(dcc.Dropdown(
+            id="postcode_drop",
+            options=[{"label": i, "value": i} for i in postcode_list],
+            multi=True,
+            placeholder="Select Postcode District",
+            style={"font-size": fontsize, "color": "black", "background-color": "white"}
+        ), style={"padding": "0px 20px 0px 20px"}
+        ),
 
         html.Br(),
 
         dbc.Row(
             [
-                dbc.Col(dcc.Dropdown(
-                    id="school_drop",
-                    options=[{"label": i, "value": i} for i in school_list],
-                    multi=True,
-                    placeholder="Select School",
-                    style={"font-size": fontsize, "color": "black", "background-color": "white"}
-                )
+                dbc.Col(
+                    dcc.Checklist(
+                        id="independent_sch",
+                        options=[
+                            {"label": "Independent School", "value": "GS"},
+                        ],
+                        value=[],
+                        inputStyle={"margin-right": "10px"}
+                    )
                 ),
 
-                dbc.Col(dcc.Dropdown(
-                    id="town_drop",
-                    options=[{"label": i, "value": i} for i in town_list],
-                    multi=True,
-                    placeholder="Select Town",
-                    style={"font-size": fontsize, "color": "black", "background-color": "white"}
-                )
-                ),
-
-                dbc.Col(dcc.Dropdown(
-                    id="postcode_drop",
-                    options=[{"label": i, "value": i} for i in postcode_list],
-                    multi=True,
-                    placeholder="Select Postcode District",
-                    style={"font-size": fontsize, "color": "black", "background-color": "white"}
-                )
+                dbc.Col(
+                    dcc.Checklist(
+                        id="grammar_sch",
+                        options=[
+                            {"label": "Grammar School", "value": "GS"},
+                        ],
+                        value=[],
+                        inputStyle={"margin-right": "10px"}
+                    )
                 )
             ],
+            style={"padding": "0px 0px 0px 20px"}
+        ),
+
+        html.Br(), html.Br(),
+
+        dbc.Row(
+            [
+                dbc.Col(html.H3("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
+                dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
+            ]
+        ),
+
+        # dbc.Row(dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "center", "font-weight": "bold"})),
+
+        html.Div(
+            [
+                dash_table.DataTable(
+                    id="datatable_pri",
+                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                    columns=[
+                        {
+                            "id": "SCHNAME",
+                            "name": ["School"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "READPROG_DESCR",
+                            "name": ["📗Reading"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "WRITPROG_DESCR",
+                            "name": ["✏️Writing"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "MATPROG_DESCR",
+                            "name": ["📐Maths"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "OFSTEDRATING",
+                            "name": ["Ofsted Rating"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "INSPECTIONDT",
+                            "name": ["Last Inspected"],
+                            "type": "datetime"
+                        },
+                        {
+                            "id": "URN",
+                            "name": ["URN"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "SCHTYPE",
+                            "name": ["School Type"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "TOWN",
+                            "name": ["Town"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PCODE",
+                            "name": ["Post Code"],
+                            "type": "text"
+                        }
+                    ],
+
+                    sort_action="native",  # native / none
+                    sort_mode="single",  # single / multi
+                    filter_action="none",  # native / none
+                    page_action="native",  # native / none
+                    page_current=0,  # current page number
+                    page_size=datatable_rows,  # rows per page
+                    fixed_rows={"headers": True},
+                    fixed_columns={"headers": True, "data": 1},
+
+                    style_table={"overflowX": "auto",  # "overflowY": "auto",
+                                 "minWidth": "100%",
+                                 "height": "800px"},
+
+                    style_header={"bold": True,
+                                  "color": "black",
+                                  "backgroundColor": "lightgrey",
+                                  "whiteSpace": "normal",
+                                  "height": "56px"
+                                  },
+
+                    style_header_conditional=[{
+                        "if": {"column_id": col},
+                        "textDecoration": "underline",
+                        "textDecorationStyle": "dotted",
+                    } for col in ["READPROG_DESCR", "WRITPROG_DESCR", "MATPROG_DESCR"]],
+
+                    tooltip_header={
+                        "READPROG_DESCR": {"value": markdown_table, "type": "markdown"},
+                        "WRITPROG_DESCR": {"value": markdown_table, "type": "markdown"},
+                        "MATPROG_DESCR": {"value": markdown_table, "type": "markdown"}
+                    },
+
+                    tooltip_delay=0,
+                    tooltip_duration=None,
+
+                    style_cell={
+                        "color": textcol,
+                        "backgroundColor": bgcol,
+                        "font-family": "Verdana",
+                        "font_size": fontsize,
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "minWidth": 88,
+                        "maxWidth": 140,
+                        "padding": "0px 10px 0px 10px"
+                    },
+
+                    style_cell_conditional=[
+                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                        {"if": {"column_id": "READPROG_DESCR"}, "textAlign": "left"},
+                        {"if": {"column_id": "WRITPROG_DESCR"}, "textAlign": "left"},
+                        {"if": {"column_id": "MATPROG_DESCR"}, "textAlign": "left"},
+                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                        {"if": {"column_id": "URN"}, "textAlign": "center"},
+                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                    ],
+
+                    style_data={
+                        # wrap long cell content into multiple lines
+                        "whiteSpace": "normal",
+                        "height": "auto"
+                    },
+
+                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                )
+            ], style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        html.Br(), html.Br(), html.Br(),
+
+        dbc.Row(
+            [
+                dbc.Col(html.H3("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
+                dbc.Col(html.H5(pri_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
+            ]
+        ),
+
+        dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("GCSE Attainment 8", className="card-title"),
+                            html.H5(
+                                id="gcse_att8_avg",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_1,
+                               "text-align": "center"
+                               }
+                    )
+                ),
+
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("Eng/Maths Grade5+", className="card-title"),
+                            html.H5(
+                                id="gcse_eng_maths_grade5_pct",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_2,
+                               "text-align": "center"
+                               }
+                    )
+                )
+            ],
+            className="mb-3",
+            style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("GCSE Entering EBacc", className="card-title"),
+                            html.H5(
+                                id="gcse_entering_ebacc",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_3,
+                               "text-align": "center"
+                               }
+                    )
+                ),
+
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("GCSE EBacc Score", className="card-title"),
+                            html.H5(
+                                id="gcse_ebacc_score",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_4,
+                               "text-align": "center"
+                               }
+                    )
+                )
+            ],
+            className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
 
         html.Br(),
 
+        html.Div(
+            [
+                dash_table.DataTable(
+                    id="datatable_sec",
+                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                    columns=[
+                        {
+                            "id": "SCHNAME",
+                            "name": ["School"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "P8_BANDING",
+                            "name": ["👨‍🎓Progress8"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "P8MEA",
+                            "name": ["Prog8 Score"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "ATT8SCR",
+                            "name": ["Attain8 Score"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PTL2BASICS_95",
+                            "name": ["Eng/Maths"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PTEBACC_E_PTQ_EE",
+                            "name": ["Enter EBacc"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "EBACCAPS",
+                            "name": ["EBacc Score"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "OFSTEDRATING",
+                            "name": ["Ofsted Rating"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "INSPECTIONDT",
+                            "name": ["Last Inspected"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "URN",
+                            "name": ["URN"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "SCHTYPE",
+                            "name": ["School Type"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "GRAMMAR",
+                            "name": ["Grammar"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "TOWN",
+                            "name": ["Town"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PCODE",
+                            "name": ["Post Code"],
+                            "type": "text"
+                        }
+                    ],
+
+                    sort_action="native",  # native / none
+                    sort_mode="single",  # single / multi
+                    filter_action="none",  # native / none
+                    page_action="native",  # native / none
+                    page_current=0,  # current page number
+                    page_size=datatable_rows,  # rows per page
+                    fixed_rows={"headers": True},
+                    fixed_columns={"headers": True, "data": 1},
+
+                    style_table={"overflowX": "auto", "overflowY": "auto",
+                                 "minWidth": "100%",
+                                 "height": "800px"},
+
+                    style_header={"bold": True,
+                                  "color": "black",
+                                  "backgroundColor": "lightgrey",
+                                  "whiteSpace": "normal",
+                                  "height": "56px"
+                                  },
+
+                    style_header_conditional=[{
+                        "if": {"column_id": col},
+                        "textDecoration": "underline",
+                        "textDecorationStyle": "dotted",
+                    } for col in ["P8_BANDING", "P8MEA", "ATT8SCR", "PTL2BASICS_95", "PTEBACC_E_PTQ_EE", "EBACCAPS"]],
+
+                    tooltip_header={
+                        "P8_BANDING": {"value": markdown_table, "type": "markdown"},
+                        "P8MEA": {"value": markdown_table2, "type": "markdown"},
+                        "ATT8SCR": {"value": markdown_table2, "type": "markdown"},
+                        "PTL2BASICS_95": {"value": markdown_table2, "type": "markdown"},
+                        "PTEBACC_E_PTQ_EE": {"value": markdown_table2, "type": "markdown"},
+                        "EBACCAPS": {"value": markdown_table2, "type": "markdown"},
+                    },
+
+                    tooltip_delay=0,
+                    tooltip_duration=None,
+
+                    style_cell={
+                        "color": textcol,
+                        "backgroundColor": bgcol,
+                        "font-family": "Verdana",
+                        "font_size": fontsize,
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "minWidth": 88,
+                        "maxWidth": 140,
+                        "padding": "0px 10px 0px 10px"
+                    },
+
+                    style_cell_conditional=[
+                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                        {"if": {"column_id": "P8_BANDING"}, "textAlign": "left"},
+                        {"if": {"column_id": "P8MEA"}, "textAlign": "center"},
+                        {"if": {"column_id": "ATT8SCR"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_1},
+                        {"if": {"column_id": "PTL2BASICS_95"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_2},
+                        {"if": {"column_id": "PTEBACC_E_PTQ_EE"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_3},
+                        {"if": {"column_id": "EBACCAPS"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_4},
+                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                        {"if": {"column_id": "URN"}, "textAlign": "center"},
+                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                        {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
+                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                    ],
+
+                    style_data={
+                        # wrap long cell content into multiple lines
+                        "whiteSpace": "normal",
+                        "height": "auto"
+                    },
+
+                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                )
+            ], style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        html.Br(), html.Br(), html.Br(),
+
         dbc.Row(
             [
-                html.Div(
-                    [
-                        dbc.Button(
-                            "Legend",
-                            id="legend-button",
-                            className="mb-3",
-                            color="primary",
-                        ),
-                        dbc.Collapse(
-                            dbc.Card(dbc.CardBody(
-                                [
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("📗✏️📐👨‍🎓 Score:"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🏫Ofsted:"),
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ]
-                                    ),
-
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("⭐⭐⭐⭐⭐"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Well Above Average"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🎓🎓🎓🎓🎓"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Outstanding"),
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ]
-                                    ),
-
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("⭐⭐⭐⭐"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Above Average"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🎓🎓🎓🎓"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Good"),
-                                                style={"font-weight": "bold", }
-                                            )
-                                        ]
-                                    ),
-
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("⭐⭐⭐"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Average"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🎓🎓🎓"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Satisfactory"),
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ]
-                                    ),
-
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("⭐⭐"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Below Average"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🎓🎓"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Requires Improvement"),
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ]
-                                    ),
-
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                html.P("⭐"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Well Below Average"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("")
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("🎓"),
-                                                style={"font-weight": "bold"}
-                                            ),
-
-                                            dbc.Col(
-                                                html.P("Inadequate"),
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ]
-                                    ),
-
-                                    html.Br(),
-                                    html.Br(),
-
-                                    html.P(
-                                        "LOWCOV = Low coverage: shown for the ‘value added’ measure and coverage indicator where schools have less than 50% of pupils included in calculation of the measure",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "NA = Not applicable: figures are either not available for the year in question, or the data field is not applicable to the school or college",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "NE = No entries: the school or college did not enter any pupils or students for the qualifications covered by the measure",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "NEW = New school or college",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "NP = Not published: for example, we do not publish Progress 8 data for independent schools and independent special schools, or breakdowns by disadvantaged and other pupils for independent schools, independent special schools and non-maintained special schools",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "SP = Small percentage: the number is between 0% and 0.5%",
-                                        className="card-text"
-                                    ),
-                                    html.P(
-                                        "SUPP = Suppressed: in certain circumstances we will suppress an establishment's data. This is usually when there are 5 or fewer pupils or students covered by the measure (29 for apprenticeships measures). We avoid making these figures public to protect individual privacy. We may also suppress data on a case-by-case basis.",
-                                        className="card-text"
-                                    ),
-                                ]
-                            )
-                            ),
-                            id="legend",
-                        )
-                    ],
-                    style={"width": "90%", "padding": "0px 0px 0px 50px"},
-                ),
-
-                html.Div(dbc.Row(
-                    [
-                        daq.ToggleSwitch(
-                            id="toggle_switch",
-                            label="Grammar School",
-                            labelPosition="bottom",
-                            color="steelblue",
-                            size=80,
-                            value=False
-                        )
-                    ]
-                ),
-                    style={"width": "10%", "padding": "0px 50px 0px 0px"}
-                )
+                dbc.Col(html.H3("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
+                dbc.Col(html.H5(pri_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
             ]
         ),
 
-        html.Br(),
-        html.Br(),
-
-        dcc.Tabs(
+        dbc.Row(
             [
-                dcc.Tab(
-                    label="PRIMARY",
-                    id="primary_tab",
-                    style=tab_style, selected_style=tab_selected_style,
-                    children=[
-                        html.Br(),
-
-                        html.Div(
-                            [
-                                dash_table.DataTable(
-                                    id="datatable_pri",
-                                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                                    columns=[
-                                        {
-                                            "id": "Row",
-                                            "name": ["Row"],
-                                            "type": "numeric"
-                                        },
-                                        {
-                                            "id": "School",
-                                            "name": ["School"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Town",
-                                            "name": ["Town"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Reading",
-                                            "name": ["📗Reading"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Writing",
-                                            "name": ["✏️Writing"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Maths",
-                                            "name": ["📐Maths"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Ofsted",
-                                            "name": ["🏫Ofsted Rating"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Last Inspected",
-                                            "name": ["Last Inspected"],
-                                            "type": "datetime"
-                                        },
-                                        {
-                                            "id": "URN",
-                                            "name": ["URN"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "School Type",
-                                            "name": ["School Type"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        }
-                                    ],
-
-                                    sort_action="native",  # native / none
-                                    sort_mode="single",  # single / multi
-                                    filter_action="none",  # native / none
-                                    page_action="native",  # native / none
-                                    page_current=0,  # current page number
-                                    page_size=datatable_rows,  # rows per page
-                                    fixed_columns={'headers': True, 'data': 2},
-
-                                    style_table={"overflowX": "auto", "overflowY": "auto",
-                                                 "minWidth": "100%",
-                                                 "height": "500px"},
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    fixed_rows={"headers": True},
-                                    style_cell={
-                                        "color": textcol,
-                                        "backgroundColor": bgcol,
-                                        "font-family": "Verdana",
-                                        "font_size": fontsize,
-                                        "overflow": "hidden",
-                                        "textOverflow": "ellipsis",
-                                        "minWidth": 180,
-                                        "maxWidth": 380,
-                                        "padding": "0px 10px 0px 10px"
-                                    },
-                                    style_cell_conditional=[
-                                        {"if": {"column_id": c}, "textAlign": "left"}
-                                        for c in ["School", "Town", "Post Code"]
-                                    ],
-                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
-                                )
-                            ], style={"padding": "0px 20px 0px 20px"}
-                        )
-                    ]
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("Average A-Level Grade", className="card-title"),
+                            html.H5(
+                                id="alevel_grade_avg",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_5,
+                               "text-align": "center"
+                               }
+                    )
                 ),
 
-                dcc.Tab(
-                    label="SECONDARY",
-                    id="secondary_tab",
-                    style=tab_style, selected_style=tab_selected_style,
-                    children=[
-                        html.Br(),
-
-                        dbc.Row(
-                            [
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("GCSE Attainment 8", className="card-title"),
-                                            html.H2(
-                                                id="gcse_att8_avg",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_1,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                ),
-
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("Eng/Maths Grade5+", className="card-title"),
-                                            html.H2(
-                                                id="gcse_eng_maths_grade5_pct",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_2,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                ),
-
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("GCSE Entering EBacc", className="card-title"),
-                                            html.H2(
-                                                id="gcse_entering_ebacc",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_3,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                ),
-
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("GCSE EBacc Score", className="card-title"),
-                                            html.H2(
-                                                id="gcse_ebacc_score",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_4,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                )
-                            ],
-                            className="mb-3",
-                            style={"padding": "0px 20px 0px 20px"}
-                        ),
-
-                        html.Div(
-                            [
-                                dash_table.DataTable(
-                                    id="datatable_sec",
-                                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                                    columns=[
-                                        {
-                                            "id": "Row",
-                                            "name": ["Row"],
-                                            "type": "numeric"
-                                        },
-                                        {
-                                            "id": "School",
-                                            "name": ["School"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Town",
-                                            "name": ["Town"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Prog 8 Band",
-                                            "name": ["👨‍🎓Progress 8"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Progress 8",
-                                            "name": ["Progress 8 Score"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Attainment 8",
-                                            "name": ["Attainment 8 Score"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Eng Maths Grade 5+",
-                                            "name": ["Eng/Maths Grade 5+"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Entering EBacc",
-                                            "name": ["Entering EBacc"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "EBacc Score",
-                                            "name": ["EBacc Score"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Ofsted",
-                                            "name": ["🏫Ofsted Rating"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Last Inspected",
-                                            "name": ["Last Inspected"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "URN",
-                                            "name": ["URN"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "School Type",
-                                            "name": ["School Type"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Grammar",
-                                            "name": ["Grammar"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        }
-                                    ],
-
-                                    sort_action="native",  # native / none
-                                    sort_mode="single",  # single / multi
-                                    filter_action="none",  # native / none
-                                    page_action="native",  # native / none
-                                    page_current=0,  # current page number
-                                    page_size=datatable_rows,  # rows per page
-                                    fixed_columns={'headers': True, 'data': 2},
-
-                                    style_table={"overflowX": "auto", "overflowY": "auto",
-                                                 "minWidth": "100%",
-                                                 "height": "500px"},
-
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    fixed_rows={"headers": True},
-                                    style_cell={
-                                        "color": textcol,
-                                        "backgroundColor": bgcol,
-                                        "font-family": "Verdana",
-                                        "font_size": fontsize,
-                                        "overflow": "hidden",
-                                        "textOverflow": "ellipsis",
-                                        "minWidth": 180,
-                                        "maxWidth": 380,
-                                        "padding": "0px 10px 0px 10px"
-                                    },
-                                    style_cell_conditional=[
-                                        {"if": {"column_id": "School"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Town"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Post Code"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Attainment 8"},
-                                         "color": "white",
-                                         "backgroundColor": col_1},
-                                        {"if": {"column_id": "Eng Maths Grade 5+"},
-                                         "color": "white",
-                                         "backgroundColor": col_2},
-                                        {"if": {"column_id": "Entering EBacc"},
-                                         "color": "white",
-                                         "backgroundColor": col_3},
-                                        {"if": {"column_id": "EBacc Score"},
-                                         "color": "white",
-                                         "backgroundColor": col_4}
-                                    ],
-                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
-                                )
-                            ], style={"padding": "0px 20px 0px 20px"}
-                        )
-                    ]
-                ),
-
-                dcc.Tab(
-                    label="POST 16",
-                    id="post16_tab",
-                    style=tab_style, selected_style=tab_selected_style,
-                    children=[
-                        html.Br(),
-
-                        dbc.Row(
-                            [
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("Average A-Level Grade", className="card-title"),
-                                            html.H2(
-                                                id="alevel_grade_avg",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_5,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                ),
-
-                                dbc.Col(
-                                    dbc.Card(
-                                        [
-                                            html.H3("Average A-Level Score", className="card-title"),
-                                            html.H2(
-                                                id="alevel_score_avg",
-                                                className="card-value",
-                                                style={"font-weight": "bold"}
-                                            )
-                                        ],
-                                        style={"color": "white",
-                                               "background": col_6,
-                                               "text-align": "center"
-                                               }
-                                    )
-                                )
-                            ],
-                            className="mb-3",
-                            style={"padding": "0px 20px 0px 20px"}
-                        ),
-
-                        html.Div(
-                            [
-                                dash_table.DataTable(
-                                    id="datatable_p16",
-                                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                                    columns=[
-                                        {
-                                            "id": "Row",
-                                            "name": ["Row"],
-                                            "type": "numeric"
-                                        },
-                                        {
-                                            "id": "School",
-                                            "name": ["School"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Town",
-                                            "name": ["Town"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Prog Band",
-                                            "name": ["👨‍🎓Progress"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Average Grade",
-                                            "name": ["Average Grade"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Average Points",
-                                            "name": ["Average Points"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Ofsted",
-                                            "name": ["🏫Ofsted Rating"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Last Inspected",
-                                            "name": ["Last Inspected"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "URN",
-                                            "name": ["URN"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "School Type",
-                                            "name": ["School Type"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Grammar",
-                                            "name": ["Grammar"],
-                                            "type": "text"
-                                        },
-                                        {
-                                            "id": "Post Code",
-                                            "name": ["Post Code"],
-                                            "type": "text"
-                                        }
-                                    ],
-
-                                    sort_action="native",  # native / none
-                                    sort_mode="single",  # single / multi
-                                    filter_action="none",  # native / none
-                                    page_action="native",  # native / none
-                                    page_current=0,  # current page number
-                                    page_size=datatable_rows,  # rows per page
-                                    fixed_columns={'headers': True, 'data': 2},
-
-                                    style_table={"overflowX": "auto", "overflowY": "auto",
-                                                 "minWidth": "100%",
-                                                 "height": "500px"},
-
-                                    style_header={"color": "white", "backgroundColor": textcol},
-                                    fixed_rows={"headers": True},
-                                    style_cell={
-                                        "color": textcol,
-                                        "backgroundColor": bgcol,
-                                        "font-family": "Verdana",
-                                        "font_size": fontsize,
-                                        "overflow": "hidden",
-                                        "textOverflow": "ellipsis",
-                                        "minWidth": 180,
-                                        "maxWidth": 380,
-                                        "padding": "0px 10px 0px 10px"
-                                    },
-                                    style_cell_conditional=[
-                                        {"if": {"column_id": "School"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Town"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Post Code"}, "textAlign": "left"},
-                                        {"if": {"column_id": "Average Grade"},
-                                         "color": "white",
-                                         "backgroundColor": col_5},
-                                        {"if": {"column_id": "Average Points"},
-                                         "color": "white",
-                                         "backgroundColor": col_6}
-                                    ],
-                                    css=[{"selector": ".row", "rule": "flex-wrap: nowrap"}],
-                                )
-                            ], style={"padding": "0px 20px 0px 20px"}
-                        )
-                    ]
+                dbc.Col(
+                    dbc.Card(
+                        [
+                            html.H6("Average A-Level Score", className="card-title"),
+                            html.H5(
+                                id="alevel_score_avg",
+                                className="card-value",
+                                style={"font-weight": "bold"}
+                            )
+                        ],
+                        style={"color": "white",
+                               "background": col_6,
+                               "text-align": "center"
+                               }
+                    )
                 )
-            ]
+            ],
+            className="mb-3",
+            style={"padding": "0px 20px 0px 20px"}
         ),
 
-        html.Br(),
-        html.Br(),
-        html.Br(),
+        html.Div(
+            [
+                dash_table.DataTable(
+                    id="datatable_p16",
+                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                    columns=[
+                        {
+                            "id": "SCHNAME",
+                            "name": ["School"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PROGRESS_BAND_ALEV",
+                            "name": ["👨‍🎓Progress"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "TALLPPEGRD_ALEV_1618",
+                            "name": ["Average Grade"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "TALLPPE_ALEV_1618",
+                            "name": ["Average Points"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "OFSTEDRATING",
+                            "name": ["Ofsted Rating"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "INSPECTIONDT",
+                            "name": ["Last Inspected"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "URN",
+                            "name": ["URN"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "SCHTYPE",
+                            "name": ["School Type"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "GRAMMAR",
+                            "name": ["Grammar"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "TOWN",
+                            "name": ["Town"],
+                            "type": "text"
+                        },
+                        {
+                            "id": "PCODE",
+                            "name": ["Post Code"],
+                            "type": "text"
+                        }
+                    ],
 
-        dbc.Row(html.Label(["* May take several seconds for initial load"]),
-                style={"font-style": "italic", "padding": "0px 0px 0px 50px"}
-                ),
+                    sort_action="native",  # native / none
+                    sort_mode="single",  # single / multi
+                    filter_action="none",  # native / none
+                    page_action="native",  # native / none
+                    page_current=0,  # current page number
+                    page_size=datatable_rows,  # rows per page
+                    fixed_rows={"headers": True},
+                    fixed_columns={"headers": True, "data": 1},
+
+                    style_table={"overflowX": "auto", "overflowY": "auto",
+                                 "minWidth": "100%",
+                                 "height": "800px"},
+
+                    style_header={"bold": True,
+                                  "color": "black",
+                                  "backgroundColor": "lightgrey",
+                                  "whiteSpace": "normal",
+                                  "height": "56px"
+                                  },
+
+                    style_header_conditional=[{
+                        "if": {"column_id": col},
+                        "textDecoration": "underline",
+                        "textDecorationStyle": "dotted",
+                    } for col in ["PROGRESS_BAND_ALEV", "TALLPPEGRD_ALEV_1618", "TALLPPE_ALEV_1618"]],
+
+                    tooltip_header={
+                        "PROGRESS_BAND_ALEV": {"value": markdown_table, "type": "markdown"},
+                        "TALLPPEGRD_ALEV_1618": {"value": markdown_table2, "type": "markdown"},
+                        "TALLPPE_ALEV_1618": {"value": markdown_table2, "type": "markdown"}
+                    },
+
+                    tooltip_delay=0,
+                    tooltip_duration=None,
+
+                    style_cell={
+                        "color": textcol,
+                        "backgroundColor": bgcol,
+                        "font-family": "Verdana",
+                        "font_size": fontsize,
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "minWidth": 88,
+                        "maxWidth": 140,
+                        "padding": "0px 10px 0px 10px"
+                    },
+
+                    style_cell_conditional=[
+                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                        {"if": {"column_id": "PROGRESS_BAND_ALEV"}, "textAlign": "left"},
+                        {"if": {"column_id": "TALLPPEGRD_ALEV_1618"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_5},
+                        {"if": {"column_id": "TALLPPE_ALEV_1618"},
+                         "textAlign": "center",
+                         "color": "white",
+                         "backgroundColor": col_6},
+                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                        {"if": {"column_id": "URN"}, "textAlign": "center"},
+                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                        {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
+                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                    ],
+
+                    style_data={
+                        # wrap long cell content into multiple lines
+                        "whiteSpace": "normal",
+                        "height": "auto"
+                    },
+
+                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                )
+            ], style={"padding": "0px 20px 0px 20px"}
+        ),
+
+        html.Br(), html.Br(), html.Br(),
 
         dbc.Row(html.Label(["Data Source: ",
                             html.A("GovUK",
@@ -904,132 +777,159 @@ app.layout = html.Div(
     [
         Output("datatable_pri", "data"),
         Output("datatable_sec", "data"),
-        Output("datatable_p16", "data")
+        Output("datatable_p16", "data"),
+        Output("pri_recs", "children"),
+        Output("sec_recs", "children"),
+        Output("p16_recs", "children")
     ],
     [
         Input("school_drop", "value"),
         Input("town_drop", "value"),
         Input("postcode_drop", "value"),
-        Input("toggle_switch", "value")
+        Input("independent_sch", "value"),
+        Input("grammar_sch", "value")
     ]
 )
-def update_datatable(selected_school, selected_area, selected_postcode, selected_grammar_sch):
+def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
     # Check for selected school filter
-    if (selected_school is None or selected_school == []):
-        df1a = df_tbl_pri
-        df2a = df_tbl_sec
-        df3a = df_tbl_p16
+    print(str(datetime.now()), "check school filter...")
+    if selected_school is None or selected_school == []:
+        df_pri_1 = df_tbl_pri
+        df_sec_1 = df_tbl_sec
+        df_p16_1 = df_tbl_p16
     else:
-        df1a = df_pri[df_pri["School"].isin(selected_school)]
-        df2a = df_sec[df_sec["School"].isin(selected_school)]
-        df3a = df_p16[df_p16["School"].isin(selected_school)]
+        df_pri_1 = df_pri[df_pri["SCHNAME"].isin(selected_school)]
+        df_sec_1 = df_sec[df_sec["SCHNAME"].isin(selected_school)]
+        df_p16_1 = df_p16[df_p16["SCHNAME"].isin(selected_school)]
 
     # Check for selected town filter
-    if (selected_area is None or selected_area == []):
-        df1b = df1a
-        df2b = df2a
-        df3b = df3a
+    print(str(datetime.now()), "check town filter...")
+    if selected_area is None or selected_area == []:
+        df_pri_2 = df_pri_1
+        df_sec_2 = df_sec_1
+        df_p16_2 = df_p16_1
     else:
-        df1b = df1a[df1a["Town"].isin(selected_area)]
-        df2b = df2a[df2a["Town"].isin(selected_area)]
-        df3b = df3a[df3a["Town"].isin(selected_area)]
+        df_pri_2 = df_pri_1[df_pri_1["TOWN"].isin(selected_area)]
+        df_sec_2 = df_sec_1[df_sec_1["TOWN"].isin(selected_area)]
+        df_p16_2 = df_p16_1[df_p16_1["TOWN"].isin(selected_area)]
 
     # Check for selected postcode filter
-    if (selected_postcode is None or selected_postcode == []):
-        df1c = df1b
-        df2c = df2b
-        df3c = df3b
+    print(str(datetime.now()), "check postcode filter...")
+    if selected_postcode is None or selected_postcode == []:
+        df_pri_3 = df_pri_2
+        df_sec_3 = df_sec_2
+        df_p16_3 = df_p16_2
     else:
-        df1c = df1b[df1b["PCODE2"].isin(selected_postcode)]
-        df2c = df2b[df2b["PCODE2"].isin(selected_postcode)]
-        df3c = df3b[df3b["PCODE2"].isin(selected_postcode)]
+        df_pri_3 = df_pri_2[df_pri_2["PCODE2"].isin(selected_postcode)]
+        df_sec_3 = df_sec_2[df_sec_2["PCODE2"].isin(selected_postcode)]
+        df_p16_3 = df_p16_2[df_p16_2["PCODE2"].isin(selected_postcode)]
+
+    # Check for selected independent school filter
+    print(str(datetime.now()), "check independent school filter...")
+    if selected_independent is None or selected_independent == []:
+        df_pri_4 = df_pri_3
+        df_sec_4 = df_sec_3
+        df_p16_4 = df_p16_3
+    else:
+        df_pri_4 = df_pri_3[df_pri_3["SCHTYPE"].isin(["Independent school"])]
+        df_sec_4 = df_sec_3[df_sec_3["SCHTYPE"].isin(["Independent school"])]
+        df_p16_4 = df_p16_3[df_p16_3["SCHTYPE"].isin(["Independent school"])]
 
     # Check for selected grammar school filter
-    if selected_grammar_sch == False:
-        pass
+    print(str(datetime.now()), "check grammar school filter...")
+    if (selected_grammar is None or selected_grammar == []):
+        df_pri_5 = df_pri_4
+        df_sec_5 = df_sec_4
+        df_p16_5 = df_p16_4
     else:
-        df2c = df2c[df2c["Grammar"].isin(["Yes"])]
-        df3c = df3c[df3c["Grammar"].isin(["Yes"])]
+        df_pri_5 = df_pri_4[df_pri_4["SCHTYPE"].isin(["dummy!"])]
+        df_sec_5 = df_sec_4[df_sec_4["GRAMMAR"].isin(["Yes"])]
+        df_p16_5 = df_p16_4[df_p16_4["GRAMMAR"].isin(["Yes"])]
 
-    df1_pri = df1c.copy().sort_values(by=["School"])
-    # Refresh row no.
-    df1_pri["Row"] = df1_pri.reset_index().index
-    df1_pri["Row"] += 1
-    if len(df1_pri) == 0:
+    df_pri_filtered = df_pri_5.copy().sort_values(by=["SCHNAME"])
+
+    if len(df_pri_filtered) == 0:
         pass
     else:
         # Map reading progress to stars
-        df1_pri.loc[(df1_pri.Reading == "1"), "Reading"] = "⭐⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Reading == "2"), "Reading"] = "⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Reading == "3"), "Reading"] = "⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Reading == "4"), "Reading"] = "⭐⭐"
-        df1_pri.loc[(df1_pri.Reading == "5"), "Reading"] = "⭐"
+        print(str(datetime.now()), "map reading progress...")
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "1"), "READPROG_DESCR"] = "⭐⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "2"), "READPROG_DESCR"] = "⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "3"), "READPROG_DESCR"] = "⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "4"), "READPROG_DESCR"] = "⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "5"), "READPROG_DESCR"] = "⭐"
         # Map writing progress to stars
-        df1_pri.loc[(df1_pri.Writing == "1"), "Writing"] = "⭐⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Writing == "2"), "Writing"] = "⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Writing == "3"), "Writing"] = "⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Writing == "4"), "Writing"] = "⭐⭐"
-        df1_pri.loc[(df1_pri.Writing == "5"), "Writing"] = "⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "1"), "WRITPROG_DESCR"] = "⭐⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "2"), "WRITPROG_DESCR"] = "⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "3"), "WRITPROG_DESCR"] = "⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "4"), "WRITPROG_DESCR"] = "⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "5"), "WRITPROG_DESCR"] = "⭐"
         # Map maths progress to stars
-        df1_pri.loc[(df1_pri.Maths == "1"), "Maths"] = "⭐⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Maths == "2"), "Maths"] = "⭐⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Maths == "3"), "Maths"] = "⭐⭐⭐"
-        df1_pri.loc[(df1_pri.Maths == "4"), "Maths"] = "⭐⭐"
-        df1_pri.loc[(df1_pri.Maths == "5"), "Maths"] = "⭐"
-        # Map ofsted rating to stars
-        df1_pri.loc[(df1_pri.Ofsted == "Outstanding"), "Ofsted"] = "🎓🎓🎓🎓🎓"
-        df1_pri.loc[(df1_pri.Ofsted == "Good"), "Ofsted"] = "🎓🎓🎓🎓"
-        df1_pri.loc[(df1_pri.Ofsted == "Satisfactory"), "Ofsted"] = "🎓🎓🎓"
-        df1_pri.loc[(df1_pri.Ofsted == "Requires Improvement"), "Ofsted"] = "🎓🎓"
-        df1_pri.loc[(df1_pri.Ofsted == "Inadequate"), "Ofsted"] = "🎓"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "1"), "MATPROG_DESCR"] = "⭐⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "2"), "MATPROG_DESCR"] = "⭐⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "3"), "MATPROG_DESCR"] = "⭐⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "4"), "MATPROG_DESCR"] = "⭐⭐"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "5"), "MATPROG_DESCR"] = "⭐"
 
-    df2_sec = df2c.copy().sort_values(by=["School"])
-    # Refresh row no.
-    df2_sec["Row"] = df2_sec.reset_index().index
-    df2_sec["Row"] += 1
-    if len(df2_sec) == 0:
+    df_sec_filtered = df_sec_5.copy().sort_values(by=["SCHNAME"])
+
+    if len(df_sec_filtered) == 0:
         pass
     else:
         # Map progress 8 to stars
-        df2_sec.loc[(df2_sec.Prog8 == "1"), "Prog 8 Band"] = "⭐⭐⭐⭐⭐"
-        df2_sec.loc[(df2_sec.Prog8 == "2"), "Prog 8 Band"] = "⭐⭐⭐⭐"
-        df2_sec.loc[(df2_sec.Prog8 == "3"), "Prog 8 Band"] = "⭐⭐⭐"
-        df2_sec.loc[(df2_sec.Prog8 == "4"), "Prog 8 Band"] = "⭐⭐"
-        df2_sec.loc[(df2_sec.Prog8 == "5"), "Prog 8 Band"] = "⭐"
-        # Map ofsted rating to stars
-        df2_sec.loc[(df2_sec.Ofsted == "Outstanding"), "Ofsted"] = "🎓🎓🎓🎓🎓"
-        df2_sec.loc[(df2_sec.Ofsted == "Good"), "Ofsted"] = "🎓🎓🎓🎓"
-        df2_sec.loc[(df2_sec.Ofsted == "Satisfactory"), "Ofsted"] = "🎓🎓🎓"
-        df2_sec.loc[(df2_sec.Ofsted == "Requires Improvement"), "Ofsted"] = "🎓🎓"
-        df2_sec.loc[(df2_sec.Ofsted == "Inadequate"), "Ofsted"] = "🎓"
+        print(str(datetime.now()), "map progress 8...")
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "1"), "P8_BANDING"] = "⭐⭐⭐⭐⭐"
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "2"), "P8_BANDING"] = "⭐⭐⭐⭐"
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "3"), "P8_BANDING"] = "⭐⭐⭐"
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "4"), "P8_BANDING"] = "⭐⭐"
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "5"), "P8_BANDING"] = "⭐"
 
-    df3_p16 = df3c.copy().sort_values(by=["School"])
-    # Refresh row no.
-    df3_p16["Row"] = df3_p16.reset_index().index
-    df3_p16["Row"] += 1
-    if len(df3_p16) == 0:
+    df_p16_filtered = df_p16_5.copy().sort_values(by=["SCHNAME"])
+
+    if len(df_p16_filtered) == 0:
         pass
     else:
         # Map progress to stars
-        df3_p16.loc[(df3_p16.Prog_Band == "1"), "Prog Band"] = "⭐⭐⭐⭐⭐"
-        df3_p16.loc[(df3_p16.Prog_Band == "2"), "Prog Band"] = "⭐⭐⭐⭐"
-        df3_p16.loc[(df3_p16.Prog_Band == "3"), "Prog Band"] = "⭐⭐⭐"
-        df3_p16.loc[(df3_p16.Prog_Band == "4"), "Prog Band"] = "⭐⭐"
-        df3_p16.loc[(df3_p16.Prog_Band == "5"), "Prog Band"] = "⭐"
-        # Map ofsted rating to stars
-        df3_p16.loc[(df3_p16.Ofsted == "Outstanding"), "Ofsted"] = "🎓🎓🎓🎓🎓"
-        df3_p16.loc[(df3_p16.Ofsted == "Good"), "Ofsted"] = "🎓🎓🎓🎓"
-        df3_p16.loc[(df3_p16.Ofsted == "Satisfactory"), "Ofsted"] = "🎓🎓🎓"
-        df3_p16.loc[(df3_p16.Ofsted == "Requires Improvement"), "Ofsted"] = "🎓🎓"
-        df3_p16.loc[(df3_p16.Ofsted == "Inadequate"), "Ofsted"] = "🎓"
+        print(str(datetime.now()), "map p16 progress...")
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "1"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐⭐"
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "2"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐"
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "3"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐"
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "4"), "PROGRESS_BAND_ALEV"] = "⭐⭐"
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "5"), "PROGRESS_BAND_ALEV"] = "⭐"
 
-    df1_pri["Last Inspected"] = pd.to_datetime(df1_pri["Last Inspection"].astype(str), format="%Y%m%d").dt.date
-    df2_sec["Last Inspected"] = pd.to_datetime(df2_sec["Last Inspection"].astype(str), format="%Y%m%d").dt.date
-    df3_p16["Last Inspected"] = pd.to_datetime(df3_p16["Last Inspection"].astype(str), format="%Y%m%d").dt.date
+    print(str(datetime.now()), "reformat inspection date...")
+    df_pri_filtered["INSPECTIONDT"] = pd.to_datetime(df_pri_filtered["INSPECTIONDT"].astype(str),
+                                                     format="%Y%m%d").dt.date
+    df_sec_filtered["INSPECTIONDT"] = pd.to_datetime(df_sec_filtered["INSPECTIONDT"].astype(str),
+                                                     format="%Y%m%d").dt.date
+    df_p16_filtered["INSPECTIONDT"] = pd.to_datetime(df_p16_filtered["INSPECTIONDT"].astype(str),
+                                                     format="%Y%m%d").dt.date
 
-    return df1_pri.to_dict("records"), \
-           df2_sec.to_dict("records"), \
-           df3_p16.to_dict("records")
+    pri_recs = len(df_pri_filtered.index)
+    sec_recs = len(df_sec_filtered.index)
+    p16_recs = len(df_p16_filtered.index)
+
+    if pri_recs == 0:
+        df_pri_filtered = df_pri_filtered.append(new_row_pri, ignore_index=True)
+
+    if sec_recs == 0:
+        df_sec_filtered = df_sec_filtered.append(new_row_sec, ignore_index=True)
+
+    if p16_recs == 0:
+        df_p16_filtered = df_p16_filtered.append(new_row_p16, ignore_index=True)
+
+    print(str(datetime.now()), "dataframe to dictionary...")
+    df_pri_updated = df_pri_filtered.to_dict("records")
+    df_sec_updated = df_sec_filtered.to_dict("records")
+    df_p16_updated = df_p16_filtered.to_dict("records")
+    print("done!!!")
+
+    return df_pri_updated, \
+           df_sec_updated, \
+           df_p16_updated, \
+           pri_recs, \
+           sec_recs, \
+           p16_recs
 
 
 @app.callback(
@@ -1052,17 +952,6 @@ def update_cards(selected_school):
     alevel_score = df_eng_avg["ALSCORE"][0]
 
     return gcse_att8, gcse_eng_maths_grade5, gcse_enter_ebaccs, gcse_ebaccs_score, alevel_grade, alevel_score
-
-
-@app.callback(
-    Output("legend", "is_open"),
-    [Input("legend-button", "n_clicks")],
-    [State("legend", "is_open")],
-)
-def legend(n, is_open):
-    if n:
-        return not is_open
-    return is_open
 
 
 if __name__ == "__main__":
