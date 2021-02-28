@@ -8,6 +8,6 @@ Redo previous project (https://github.com/waiky8/uk-schools-view) but this time 
 Check out https://eng-schools.herokuapp.com/
 
 Sample.<br>
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.png)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_2.png)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_3.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot1.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot2.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot3.png)
