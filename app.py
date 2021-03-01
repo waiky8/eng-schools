@@ -21,7 +21,7 @@ app.title = "ENG Schools"
 datatable_rows = 10
 textcol = "steelblue"  # text colour
 bgcol = "white"  # background colour of charts, table etc.
-fontsize = 14
+fontsize = 15
 
 col_1 = "royalblue"
 col_2 = "slategrey"
