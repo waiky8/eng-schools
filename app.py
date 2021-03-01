@@ -170,8 +170,6 @@ app.layout = html.Div(
             ]
         ),
 
-        # dbc.Row(dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "center", "font-weight": "bold"})),
-
         html.Div(
             [
                 dcc.Loading(
@@ -394,8 +392,6 @@ app.layout = html.Div(
             className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
-
-        html.Br(),
 
         html.Div(
             [
