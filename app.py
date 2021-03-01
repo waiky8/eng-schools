@@ -248,7 +248,7 @@ app.layout = html.Div(
                                           "color": "black",
                                           "backgroundColor": "lightgrey",
                                           "whiteSpace": "normal",
-                                          "height": "56px"
+                                          "height": "64px"
                                           },
 
                             style_header_conditional=[{
@@ -491,7 +491,7 @@ app.layout = html.Div(
                                           "color": "black",
                                           "backgroundColor": "lightgrey",
                                           "whiteSpace": "normal",
-                                          "height": "56px"
+                                          "height": "64px"
                                           },
 
                             style_header_conditional=[{
@@ -637,12 +637,12 @@ app.layout = html.Div(
                                 },
                                 {
                                     "id": "TALLPPEGRD_ALEV_1618",
-                                    "name": ["Average Grade"],
+                                    "name": ["Avg Grade"],
                                     "type": "text"
                                 },
                                 {
                                     "id": "TALLPPE_ALEV_1618",
-                                    "name": ["Average Points"],
+                                    "name": ["Avg Points"],
                                     "type": "text"
                                 },
                                 {
@@ -699,7 +699,7 @@ app.layout = html.Div(
                                           "color": "black",
                                           "backgroundColor": "lightgrey",
                                           "whiteSpace": "normal",
-                                          "height": "56px"
+                                          "height": "64px"
                                           },
 
                             style_header_conditional=[{
