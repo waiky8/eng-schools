@@ -174,129 +174,134 @@ app.layout = html.Div(
 
         html.Div(
             [
-                dash_table.DataTable(
-                    id="datatable_pri",
-                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                    columns=[
-                        {
-                            "id": "SCHNAME",
-                            "name": ["School"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "READPROG_DESCR",
-                            "name": ["📗Reading"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "WRITPROG_DESCR",
-                            "name": ["✏️Writing"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "MATPROG_DESCR",
-                            "name": ["📐Maths"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "OFSTEDRATING",
-                            "name": ["Ofsted Rating"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "INSPECTIONDT",
-                            "name": ["Last Inspected"],
-                            "type": "datetime"
-                        },
-                        {
-                            "id": "URN",
-                            "name": ["URN"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "SCHTYPE",
-                            "name": ["School Type"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "TOWN",
-                            "name": ["Town"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PCODE",
-                            "name": ["Post Code"],
-                            "type": "text"
-                        }
-                    ],
+                dcc.Loading(
+                    children=
+                    [
+                        dash_table.DataTable(
+                            id="datatable_pri",
+                            # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                            columns=[
+                                {
+                                    "id": "SCHNAME",
+                                    "name": ["School"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "READPROG_DESCR",
+                                    "name": ["📗Reading"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "WRITPROG_DESCR",
+                                    "name": ["✏️Writing"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "MATPROG_DESCR",
+                                    "name": ["📐Maths"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "OFSTEDRATING",
+                                    "name": ["Ofsted Rating"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "INSPECTIONDT",
+                                    "name": ["Last Inspected"],
+                                    "type": "datetime"
+                                },
+                                {
+                                    "id": "URN",
+                                    "name": ["URN"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "SCHTYPE",
+                                    "name": ["School Type"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "TOWN",
+                                    "name": ["Town"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PCODE",
+                                    "name": ["Post Code"],
+                                    "type": "text"
+                                }
+                            ],
 
-                    sort_action="native",  # native / none
-                    sort_mode="single",  # single / multi
-                    filter_action="none",  # native / none
-                    page_action="native",  # native / none
-                    page_current=0,  # current page number
-                    page_size=datatable_rows,  # rows per page
-                    fixed_rows={"headers": True},
-                    fixed_columns={"headers": True, "data": 1},
+                            sort_action="native",  # native / none
+                            sort_mode="single",  # single / multi
+                            filter_action="none",  # native / none
+                            page_action="native",  # native / none
+                            page_current=0,  # current page number
+                            page_size=datatable_rows,  # rows per page
+                            fixed_rows={"headers": True},
+                            fixed_columns={"headers": True, "data": 1},
 
-                    style_table={"overflowX": "auto",  # "overflowY": "auto",
-                                 "minWidth": "100%",
-                                 "height": "800px"},
+                            style_table={"overflowX": "auto",  # "overflowY": "auto",
+                                         "minWidth": "100%",
+                                         "height": "800px"},
 
-                    style_header={"bold": True,
-                                  "color": "black",
-                                  "backgroundColor": "lightgrey",
-                                  "whiteSpace": "normal",
-                                  "height": "56px"
-                                  },
+                            style_header={"bold": True,
+                                          "color": "black",
+                                          "backgroundColor": "lightgrey",
+                                          "whiteSpace": "normal",
+                                          "height": "56px"
+                                          },
 
-                    style_header_conditional=[{
-                        "if": {"column_id": col},
-                        "textDecoration": "underline",
-                        "textDecorationStyle": "dotted",
-                    } for col in ["READPROG_DESCR", "WRITPROG_DESCR", "MATPROG_DESCR"]],
+                            style_header_conditional=[{
+                                "if": {"column_id": col},
+                                "textDecoration": "underline",
+                                "textDecorationStyle": "dotted",
+                            } for col in ["READPROG_DESCR", "WRITPROG_DESCR", "MATPROG_DESCR"]],
 
-                    tooltip_header={
-                        "READPROG_DESCR": {"value": markdown_table, "type": "markdown"},
-                        "WRITPROG_DESCR": {"value": markdown_table, "type": "markdown"},
-                        "MATPROG_DESCR": {"value": markdown_table, "type": "markdown"}
-                    },
+                            tooltip_header={
+                                "READPROG_DESCR": {"value": markdown_table, "type": "markdown"},
+                                "WRITPROG_DESCR": {"value": markdown_table, "type": "markdown"},
+                                "MATPROG_DESCR": {"value": markdown_table, "type": "markdown"}
+                            },
 
-                    tooltip_delay=0,
-                    tooltip_duration=None,
+                            tooltip_delay=0,
+                            tooltip_duration=None,
 
-                    style_cell={
-                        "color": textcol,
-                        "backgroundColor": bgcol,
-                        "font-family": "Verdana",
-                        "font_size": fontsize,
-                        "overflow": "hidden",
-                        "textOverflow": "ellipsis",
-                        "minWidth": 88,
-                        "maxWidth": 140,
-                        "padding": "0px 10px 0px 10px"
-                    },
+                            style_cell={
+                                "color": textcol,
+                                "backgroundColor": bgcol,
+                                "font-family": "Verdana",
+                                "font_size": fontsize,
+                                "overflow": "hidden",
+                                "textOverflow": "ellipsis",
+                                "minWidth": 88,
+                                "maxWidth": 140,
+                                "padding": "0px 10px 0px 10px"
+                            },
 
-                    style_cell_conditional=[
-                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
-                        {"if": {"column_id": "READPROG_DESCR"}, "textAlign": "left"},
-                        {"if": {"column_id": "WRITPROG_DESCR"}, "textAlign": "left"},
-                        {"if": {"column_id": "MATPROG_DESCR"}, "textAlign": "left"},
-                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
-                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
-                        {"if": {"column_id": "URN"}, "textAlign": "center"},
-                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
-                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
-                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
-                    ],
+                            style_cell_conditional=[
+                                {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                                {"if": {"column_id": "READPROG_DESCR"}, "textAlign": "left"},
+                                {"if": {"column_id": "WRITPROG_DESCR"}, "textAlign": "left"},
+                                {"if": {"column_id": "MATPROG_DESCR"}, "textAlign": "left"},
+                                {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                                {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                                {"if": {"column_id": "URN"}, "textAlign": "center"},
+                                {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                                {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                                {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                            ],
 
-                    style_data={
-                        # wrap long cell content into multiple lines
-                        "whiteSpace": "normal",
-                        "height": "auto"
-                    },
+                            style_data={
+                                # wrap long cell content into multiple lines
+                                "whiteSpace": "normal",
+                                "height": "auto"
+                            },
 
-                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                            css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                        )
+                    ]
                 )
             ], style={"padding": "0px 20px 0px 20px"}
         ),
@@ -394,168 +399,174 @@ app.layout = html.Div(
 
         html.Div(
             [
-                dash_table.DataTable(
-                    id="datatable_sec",
-                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                    columns=[
-                        {
-                            "id": "SCHNAME",
-                            "name": ["School"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "P8_BANDING",
-                            "name": ["👨‍🎓Progress8"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "P8MEA",
-                            "name": ["Prog8 Score"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "ATT8SCR",
-                            "name": ["Attain8 Score"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PTL2BASICS_95",
-                            "name": ["Eng/Maths"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PTEBACC_E_PTQ_EE",
-                            "name": ["Enter EBacc"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "EBACCAPS",
-                            "name": ["EBacc Score"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "OFSTEDRATING",
-                            "name": ["Ofsted Rating"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "INSPECTIONDT",
-                            "name": ["Last Inspected"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "URN",
-                            "name": ["URN"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "SCHTYPE",
-                            "name": ["School Type"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "GRAMMAR",
-                            "name": ["Grammar"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "TOWN",
-                            "name": ["Town"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PCODE",
-                            "name": ["Post Code"],
-                            "type": "text"
-                        }
-                    ],
+                dcc.Loading(
+                    children=
+                    [
+                        dash_table.DataTable(
+                            id="datatable_sec",
+                            # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                            columns=[
+                                {
+                                    "id": "SCHNAME",
+                                    "name": ["School"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "P8_BANDING",
+                                    "name": ["👨‍🎓Progress8"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "P8MEA",
+                                    "name": ["Prog8 Score"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "ATT8SCR",
+                                    "name": ["Attain8 Score"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PTL2BASICS_95",
+                                    "name": ["Eng/Maths"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PTEBACC_E_PTQ_EE",
+                                    "name": ["Enter EBacc"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "EBACCAPS",
+                                    "name": ["EBacc Score"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "OFSTEDRATING",
+                                    "name": ["Ofsted Rating"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "INSPECTIONDT",
+                                    "name": ["Last Inspected"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "URN",
+                                    "name": ["URN"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "SCHTYPE",
+                                    "name": ["School Type"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "GRAMMAR",
+                                    "name": ["Grammar"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "TOWN",
+                                    "name": ["Town"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PCODE",
+                                    "name": ["Post Code"],
+                                    "type": "text"
+                                }
+                            ],
 
-                    sort_action="native",  # native / none
-                    sort_mode="single",  # single / multi
-                    filter_action="none",  # native / none
-                    page_action="native",  # native / none
-                    page_current=0,  # current page number
-                    page_size=datatable_rows,  # rows per page
-                    fixed_rows={"headers": True},
-                    fixed_columns={"headers": True, "data": 1},
+                            sort_action="native",  # native / none
+                            sort_mode="single",  # single / multi
+                            filter_action="none",  # native / none
+                            page_action="native",  # native / none
+                            page_current=0,  # current page number
+                            page_size=datatable_rows,  # rows per page
+                            fixed_rows={"headers": True},
+                            fixed_columns={"headers": True, "data": 1},
 
-                    style_table={"overflowX": "auto", "overflowY": "auto",
-                                 "minWidth": "100%",
-                                 "height": "800px"},
+                            style_table={"overflowX": "auto", "overflowY": "auto",
+                                         "minWidth": "100%",
+                                         "height": "800px"},
 
-                    style_header={"bold": True,
-                                  "color": "black",
-                                  "backgroundColor": "lightgrey",
-                                  "whiteSpace": "normal",
-                                  "height": "56px"
-                                  },
+                            style_header={"bold": True,
+                                          "color": "black",
+                                          "backgroundColor": "lightgrey",
+                                          "whiteSpace": "normal",
+                                          "height": "56px"
+                                          },
 
-                    style_header_conditional=[{
-                        "if": {"column_id": col},
-                        "textDecoration": "underline",
-                        "textDecorationStyle": "dotted",
-                    } for col in ["P8_BANDING", "P8MEA", "ATT8SCR", "PTL2BASICS_95", "PTEBACC_E_PTQ_EE", "EBACCAPS"]],
+                            style_header_conditional=[{
+                                "if": {"column_id": col},
+                                "textDecoration": "underline",
+                                "textDecorationStyle": "dotted",
+                            } for col in
+                                ["P8_BANDING", "P8MEA", "ATT8SCR", "PTL2BASICS_95", "PTEBACC_E_PTQ_EE", "EBACCAPS"]],
 
-                    tooltip_header={
-                        "P8_BANDING": {"value": markdown_table, "type": "markdown"},
-                        "P8MEA": {"value": markdown_table2, "type": "markdown"},
-                        "ATT8SCR": {"value": markdown_table2, "type": "markdown"},
-                        "PTL2BASICS_95": {"value": markdown_table2, "type": "markdown"},
-                        "PTEBACC_E_PTQ_EE": {"value": markdown_table2, "type": "markdown"},
-                        "EBACCAPS": {"value": markdown_table2, "type": "markdown"},
-                    },
+                            tooltip_header={
+                                "P8_BANDING": {"value": markdown_table, "type": "markdown"},
+                                "P8MEA": {"value": markdown_table2, "type": "markdown"},
+                                "ATT8SCR": {"value": markdown_table2, "type": "markdown"},
+                                "PTL2BASICS_95": {"value": markdown_table2, "type": "markdown"},
+                                "PTEBACC_E_PTQ_EE": {"value": markdown_table2, "type": "markdown"},
+                                "EBACCAPS": {"value": markdown_table2, "type": "markdown"},
+                            },
 
-                    tooltip_delay=0,
-                    tooltip_duration=None,
+                            tooltip_delay=0,
+                            tooltip_duration=None,
 
-                    style_cell={
-                        "color": textcol,
-                        "backgroundColor": bgcol,
-                        "font-family": "Verdana",
-                        "font_size": fontsize,
-                        "overflow": "hidden",
-                        "textOverflow": "ellipsis",
-                        "minWidth": 88,
-                        "maxWidth": 140,
-                        "padding": "0px 10px 0px 10px"
-                    },
+                            style_cell={
+                                "color": textcol,
+                                "backgroundColor": bgcol,
+                                "font-family": "Verdana",
+                                "font_size": fontsize,
+                                "overflow": "hidden",
+                                "textOverflow": "ellipsis",
+                                "minWidth": 88,
+                                "maxWidth": 140,
+                                "padding": "0px 10px 0px 10px"
+                            },
 
-                    style_cell_conditional=[
-                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
-                        {"if": {"column_id": "P8_BANDING"}, "textAlign": "left"},
-                        {"if": {"column_id": "P8MEA"}, "textAlign": "center"},
-                        {"if": {"column_id": "ATT8SCR"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_1},
-                        {"if": {"column_id": "PTL2BASICS_95"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_2},
-                        {"if": {"column_id": "PTEBACC_E_PTQ_EE"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_3},
-                        {"if": {"column_id": "EBACCAPS"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_4},
-                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
-                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
-                        {"if": {"column_id": "URN"}, "textAlign": "center"},
-                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
-                        {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
-                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
-                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
-                    ],
+                            style_cell_conditional=[
+                                {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                                {"if": {"column_id": "P8_BANDING"}, "textAlign": "left"},
+                                {"if": {"column_id": "P8MEA"}, "textAlign": "center"},
+                                {"if": {"column_id": "ATT8SCR"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_1},
+                                {"if": {"column_id": "PTL2BASICS_95"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_2},
+                                {"if": {"column_id": "PTEBACC_E_PTQ_EE"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_3},
+                                {"if": {"column_id": "EBACCAPS"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_4},
+                                {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                                {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                                {"if": {"column_id": "URN"}, "textAlign": "center"},
+                                {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                                {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
+                                {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                                {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                            ],
 
-                    style_data={
-                        # wrap long cell content into multiple lines
-                        "whiteSpace": "normal",
-                        "height": "auto"
-                    },
+                            style_data={
+                                # wrap long cell content into multiple lines
+                                "whiteSpace": "normal",
+                                "height": "auto"
+                            },
 
-                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                            css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                        )
+                    ]
                 )
             ], style={"padding": "0px 20px 0px 20px"}
         ),
@@ -611,141 +622,146 @@ app.layout = html.Div(
 
         html.Div(
             [
-                dash_table.DataTable(
-                    id="datatable_p16",
-                    # columns=[{"name": i, "id": i} for i in df_tbl_pri],
-                    columns=[
-                        {
-                            "id": "SCHNAME",
-                            "name": ["School"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PROGRESS_BAND_ALEV",
-                            "name": ["👨‍🎓Progress"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "TALLPPEGRD_ALEV_1618",
-                            "name": ["Average Grade"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "TALLPPE_ALEV_1618",
-                            "name": ["Average Points"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "OFSTEDRATING",
-                            "name": ["Ofsted Rating"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "INSPECTIONDT",
-                            "name": ["Last Inspected"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "URN",
-                            "name": ["URN"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "SCHTYPE",
-                            "name": ["School Type"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "GRAMMAR",
-                            "name": ["Grammar"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "TOWN",
-                            "name": ["Town"],
-                            "type": "text"
-                        },
-                        {
-                            "id": "PCODE",
-                            "name": ["Post Code"],
-                            "type": "text"
-                        }
-                    ],
+                dcc.Loading(
+                    children=
+                    [
+                        dash_table.DataTable(
+                            id="datatable_p16",
+                            # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+                            columns=[
+                                {
+                                    "id": "SCHNAME",
+                                    "name": ["School"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PROGRESS_BAND_ALEV",
+                                    "name": ["👨‍🎓Progress"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "TALLPPEGRD_ALEV_1618",
+                                    "name": ["Average Grade"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "TALLPPE_ALEV_1618",
+                                    "name": ["Average Points"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "OFSTEDRATING",
+                                    "name": ["Ofsted Rating"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "INSPECTIONDT",
+                                    "name": ["Last Inspected"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "URN",
+                                    "name": ["URN"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "SCHTYPE",
+                                    "name": ["School Type"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "GRAMMAR",
+                                    "name": ["Grammar"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "TOWN",
+                                    "name": ["Town"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "PCODE",
+                                    "name": ["Post Code"],
+                                    "type": "text"
+                                }
+                            ],
 
-                    sort_action="native",  # native / none
-                    sort_mode="single",  # single / multi
-                    filter_action="none",  # native / none
-                    page_action="native",  # native / none
-                    page_current=0,  # current page number
-                    page_size=datatable_rows,  # rows per page
-                    fixed_rows={"headers": True},
-                    fixed_columns={"headers": True, "data": 1},
+                            sort_action="native",  # native / none
+                            sort_mode="single",  # single / multi
+                            filter_action="none",  # native / none
+                            page_action="native",  # native / none
+                            page_current=0,  # current page number
+                            page_size=datatable_rows,  # rows per page
+                            fixed_rows={"headers": True},
+                            fixed_columns={"headers": True, "data": 1},
 
-                    style_table={"overflowX": "auto", "overflowY": "auto",
-                                 "minWidth": "100%",
-                                 "height": "800px"},
+                            style_table={"overflowX": "auto", "overflowY": "auto",
+                                         "minWidth": "100%",
+                                         "height": "800px"},
 
-                    style_header={"bold": True,
-                                  "color": "black",
-                                  "backgroundColor": "lightgrey",
-                                  "whiteSpace": "normal",
-                                  "height": "56px"
-                                  },
+                            style_header={"bold": True,
+                                          "color": "black",
+                                          "backgroundColor": "lightgrey",
+                                          "whiteSpace": "normal",
+                                          "height": "56px"
+                                          },
 
-                    style_header_conditional=[{
-                        "if": {"column_id": col},
-                        "textDecoration": "underline",
-                        "textDecorationStyle": "dotted",
-                    } for col in ["PROGRESS_BAND_ALEV", "TALLPPEGRD_ALEV_1618", "TALLPPE_ALEV_1618"]],
+                            style_header_conditional=[{
+                                "if": {"column_id": col},
+                                "textDecoration": "underline",
+                                "textDecorationStyle": "dotted",
+                            } for col in ["PROGRESS_BAND_ALEV", "TALLPPEGRD_ALEV_1618", "TALLPPE_ALEV_1618"]],
 
-                    tooltip_header={
-                        "PROGRESS_BAND_ALEV": {"value": markdown_table, "type": "markdown"},
-                        "TALLPPEGRD_ALEV_1618": {"value": markdown_table2, "type": "markdown"},
-                        "TALLPPE_ALEV_1618": {"value": markdown_table2, "type": "markdown"}
-                    },
+                            tooltip_header={
+                                "PROGRESS_BAND_ALEV": {"value": markdown_table, "type": "markdown"},
+                                "TALLPPEGRD_ALEV_1618": {"value": markdown_table2, "type": "markdown"},
+                                "TALLPPE_ALEV_1618": {"value": markdown_table2, "type": "markdown"}
+                            },
 
-                    tooltip_delay=0,
-                    tooltip_duration=None,
+                            tooltip_delay=0,
+                            tooltip_duration=None,
 
-                    style_cell={
-                        "color": textcol,
-                        "backgroundColor": bgcol,
-                        "font-family": "Verdana",
-                        "font_size": fontsize,
-                        "overflow": "hidden",
-                        "textOverflow": "ellipsis",
-                        "minWidth": 88,
-                        "maxWidth": 140,
-                        "padding": "0px 10px 0px 10px"
-                    },
+                            style_cell={
+                                "color": textcol,
+                                "backgroundColor": bgcol,
+                                "font-family": "Verdana",
+                                "font_size": fontsize,
+                                "overflow": "hidden",
+                                "textOverflow": "ellipsis",
+                                "minWidth": 88,
+                                "maxWidth": 140,
+                                "padding": "0px 10px 0px 10px"
+                            },
 
-                    style_cell_conditional=[
-                        {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
-                        {"if": {"column_id": "PROGRESS_BAND_ALEV"}, "textAlign": "left"},
-                        {"if": {"column_id": "TALLPPEGRD_ALEV_1618"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_5},
-                        {"if": {"column_id": "TALLPPE_ALEV_1618"},
-                         "textAlign": "center",
-                         "color": "white",
-                         "backgroundColor": col_6},
-                        {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
-                        {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
-                        {"if": {"column_id": "URN"}, "textAlign": "center"},
-                        {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
-                        {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
-                        {"if": {"column_id": "TOWN"}, "textAlign": "left"},
-                        {"if": {"column_id": "PCODE"}, "textAlign": "left"},
-                    ],
+                            style_cell_conditional=[
+                                {"if": {"column_id": "SCHNAME"}, "textAlign": "left"},
+                                {"if": {"column_id": "PROGRESS_BAND_ALEV"}, "textAlign": "left"},
+                                {"if": {"column_id": "TALLPPEGRD_ALEV_1618"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_5},
+                                {"if": {"column_id": "TALLPPE_ALEV_1618"},
+                                 "textAlign": "center",
+                                 "color": "white",
+                                 "backgroundColor": col_6},
+                                {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
+                                {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
+                                {"if": {"column_id": "URN"}, "textAlign": "center"},
+                                {"if": {"column_id": "SCHTYPE"}, "textAlign": "left"},
+                                {"if": {"column_id": "GRAMMAR"}, "textAlign": "center"},
+                                {"if": {"column_id": "TOWN"}, "textAlign": "left"},
+                                {"if": {"column_id": "PCODE"}, "textAlign": "left"},
+                            ],
 
-                    style_data={
-                        # wrap long cell content into multiple lines
-                        "whiteSpace": "normal",
-                        "height": "auto"
-                    },
+                            style_data={
+                                # wrap long cell content into multiple lines
+                                "whiteSpace": "normal",
+                                "height": "auto"
+                            },
 
-                    css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                            css=[{"selector": ".row", "rule": "margin: 0; flex-wrap: nowrap"}],
+                        )
+                    ]
                 )
             ], style={"padding": "0px 20px 0px 20px"}
         ),
