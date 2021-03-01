@@ -808,7 +808,6 @@ app.layout = html.Div(
 )
 def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
     # Check for selected school filter
-    print(str(datetime.now()), "check school filter...")
     if selected_school is None or selected_school == []:
         df_pri_1 = df_tbl_pri
         df_sec_1 = df_tbl_sec
@@ -819,7 +818,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_p16_1 = df_p16[df_p16["SCHNAME"].isin(selected_school)]
 
     # Check for selected town filter
-    print(str(datetime.now()), "check town filter...")
     if selected_area is None or selected_area == []:
         df_pri_2 = df_pri_1
         df_sec_2 = df_sec_1
@@ -830,7 +828,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_p16_2 = df_p16_1[df_p16_1["TOWN"].isin(selected_area)]
 
     # Check for selected postcode filter
-    print(str(datetime.now()), "check postcode filter...")
     if selected_postcode is None or selected_postcode == []:
         df_pri_3 = df_pri_2
         df_sec_3 = df_sec_2
@@ -841,7 +838,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_p16_3 = df_p16_2[df_p16_2["PCODE2"].isin(selected_postcode)]
 
     # Check for selected independent school filter
-    print(str(datetime.now()), "check independent school filter...")
     if selected_independent is None or selected_independent == []:
         df_pri_4 = df_pri_3
         df_sec_4 = df_sec_3
@@ -852,7 +848,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_p16_4 = df_p16_3[df_p16_3["SCHTYPE"].isin(["Independent school"])]
 
     # Check for selected grammar school filter
-    print(str(datetime.now()), "check grammar school filter...")
     if (selected_grammar is None or selected_grammar == []):
         df_pri_5 = df_pri_4
         df_sec_5 = df_sec_4
@@ -868,7 +863,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         # Map reading progress to stars
-        print(str(datetime.now()), "map reading progress...")
         df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "1"), "READPROG_DESCR"] = "⭐⭐⭐⭐⭐"
         df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "2"), "READPROG_DESCR"] = "⭐⭐⭐⭐"
         df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "3"), "READPROG_DESCR"] = "⭐⭐⭐"
@@ -893,7 +887,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         # Map progress 8 to stars
-        print(str(datetime.now()), "map progress 8...")
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "1"), "P8_BANDING"] = "⭐⭐⭐⭐⭐"
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "2"), "P8_BANDING"] = "⭐⭐⭐⭐"
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "3"), "P8_BANDING"] = "⭐⭐⭐"
@@ -906,14 +899,12 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         # Map progress to stars
-        print(str(datetime.now()), "map p16 progress...")
         df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "1"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐⭐"
         df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "2"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐"
         df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "3"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐"
         df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "4"), "PROGRESS_BAND_ALEV"] = "⭐⭐"
         df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "5"), "PROGRESS_BAND_ALEV"] = "⭐"
 
-    print(str(datetime.now()), "reformat inspection date...")
     df_pri_filtered["INSPECTIONDT"] = pd.to_datetime(df_pri_filtered["INSPECTIONDT"].astype(str),
                                                      format="%Y%m%d").dt.date
     df_sec_filtered["INSPECTIONDT"] = pd.to_datetime(df_sec_filtered["INSPECTIONDT"].astype(str),
@@ -934,11 +925,9 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
     if p16_recs == 0:
         df_p16_filtered = df_p16_filtered.append(new_row_p16, ignore_index=True)
 
-    print(str(datetime.now()), "dataframe to dictionary...")
     df_pri_updated = df_pri_filtered.to_dict("records")
     df_sec_updated = df_sec_filtered.to_dict("records")
     df_p16_updated = df_p16_filtered.to_dict("records")
-    print("done!!!")
 
     return df_pri_updated, \
            df_sec_updated, \
