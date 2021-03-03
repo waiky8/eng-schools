@@ -163,11 +163,15 @@ app.layout = html.Div(
 
         html.Br(), html.Br(),
 
+        dbc.Col(html.H6("* hover over table headings for legend"),
+                style={"text-align": "left", "font-style": "italic", "padding": "0px 0px 0px 20px"}),
+
         dbc.Row(
             [
                 dbc.Col(html.H3("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
+                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
                 dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
-            ]
+            ], style={"padding": "0px 0px 0px 20px"}
         ),
 
         html.Div(
@@ -309,8 +313,9 @@ app.layout = html.Div(
         dbc.Row(
             [
                 dbc.Col(html.H3("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
-                dbc.Col(html.H5(pri_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
-            ]
+                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                dbc.Col(html.H5(sec_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
+            ], style={"padding": "0px 0px 0px 20px"}
         ),
 
         dbc.Row(
@@ -572,8 +577,9 @@ app.layout = html.Div(
         dbc.Row(
             [
                 dbc.Col(html.H3("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
-                dbc.Col(html.H5(pri_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
-            ]
+                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                dbc.Col(html.H5(p16_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
+            ], style={"padding": "0px 0px 0px 20px"}
         ),
 
         dbc.Row(
