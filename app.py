@@ -828,6 +828,7 @@ app.layout = html.Div(
     ]
 )
 def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
+    # global df_tbl_pri, df_tbl_sec, df_tbl_p16
     print(str(datetime.now()), "[1] start apply filters...")
     # Check for selected school filter
     if selected_school is None or selected_school == []:
@@ -935,10 +936,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
     df_p16_filtered["INSPECTIONDT"] = pd.to_datetime(df_p16_filtered["INSPECTIONDT"].astype(str),
                                                      format="%Y%m%d").dt.date
 
-    df_pri_filtered["WEBLINK"] = df_pri_filtered.apply(f, axis=1)
-    df_sec_filtered["WEBLINK"] = df_sec_filtered.apply(f, axis=1)
-    df_p16_filtered["WEBLINK"] = df_p16_filtered.apply(f, axis=1)
-
     pri_recs = len(df_pri_filtered.index)
     sec_recs = len(df_sec_filtered.index)
     p16_recs = len(df_p16_filtered.index)
@@ -951,6 +948,10 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
 
     if p16_recs == 0:
         df_p16_filtered = df_p16_filtered.append(new_row_p16, ignore_index=True)
+
+    df_pri_filtered["WEBLINK"] = df_pri_filtered.apply(f, axis=1)
+    df_sec_filtered["WEBLINK"] = df_sec_filtered.apply(f, axis=1)
+    df_p16_filtered["WEBLINK"] = df_p16_filtered.apply(f, axis=1)
 
     df_pri_updated = df_pri_filtered.to_dict("records")
     df_sec_updated = df_sec_filtered.to_dict("records")
