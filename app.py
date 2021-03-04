@@ -23,7 +23,7 @@ textcol = "dimgrey"  # text colour
 bgcol = "white"  # background colour of charts, table etc.
 fontsize = 15
 
-star = "👨‍🎓"   # "👩‍🎓"
+star = "👨‍🎓"  # "👩‍🎓"
 
 col_1 = "royalblue"
 col_2 = "slategrey"
@@ -234,6 +234,12 @@ app.layout = html.Div(
                                     "id": "PCODE",
                                     "name": ["Post Code"],
                                     "type": "text"
+                                },
+                                {
+                                    "id": "WEBLINK",
+                                    "name": ["Website"],
+                                    "type": "text",
+                                    "presentation": "markdown"
                                 }
                             ],
 
@@ -478,6 +484,12 @@ app.layout = html.Div(
                                     "id": "PCODE",
                                     "name": ["Post Code"],
                                     "type": "text"
+                                },
+                                {
+                                    "id": "WEBLINK",
+                                    "name": ["Website"],
+                                    "type": "text",
+                                    "presentation": "markdown"
                                 }
                             ],
 
@@ -687,6 +699,12 @@ app.layout = html.Div(
                                     "id": "PCODE",
                                     "name": ["Post Code"],
                                     "type": "text"
+                                },
+                                {
+                                    "id": "WEBLINK",
+                                    "name": ["Website"],
+                                    "type": "text",
+                                    "presentation": "markdown"
                                 }
                             ],
 
@@ -809,7 +827,6 @@ app.layout = html.Div(
         Input("grammar_sch", "value")
     ]
 )
-
 def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
     print(str(datetime.now()), "[1] start apply filters...")
     # Check for selected school filter
@@ -918,6 +935,10 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
     df_p16_filtered["INSPECTIONDT"] = pd.to_datetime(df_p16_filtered["INSPECTIONDT"].astype(str),
                                                      format="%Y%m%d").dt.date
 
+    df_pri_filtered["WEBLINK"] = df_pri_filtered.apply(f, axis=1)
+    df_sec_filtered["WEBLINK"] = df_sec_filtered.apply(f, axis=1)
+    df_p16_filtered["WEBLINK"] = df_p16_filtered.apply(f, axis=1)
+
     pri_recs = len(df_pri_filtered.index)
     sec_recs = len(df_sec_filtered.index)
     p16_recs = len(df_p16_filtered.index)
@@ -965,6 +986,15 @@ def update_cards(selected_school):
     alevel_score = df_eng_avg["ALSCORE"][0]
 
     return gcse_att8, gcse_eng_maths_grade5, gcse_enter_ebaccs, gcse_ebaccs_score, alevel_grade, alevel_score
+
+
+def f(row):
+    if str(row["WEB"]).startswith("http"):
+        l = "[{0}]({0})".format(row["WEB"])
+    else:
+        l = ""
+
+    return l
 
 
 if __name__ == "__main__":
