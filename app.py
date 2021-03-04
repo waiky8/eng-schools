@@ -19,9 +19,11 @@ app.title = "ENG Schools"
 
 # App parameters
 datatable_rows = 10
-textcol = "steelblue"  # text colour
+textcol = "dimgrey"  # text colour
 bgcol = "white"  # background colour of charts, table etc.
 fontsize = 15
+
+star = "👨‍🎓"   # "👩‍🎓"
 
 col_1 = "royalblue"
 col_2 = "slategrey"
@@ -30,14 +32,14 @@ col_4 = "cornflowerblue"
 col_5 = "darkmagenta"
 col_6 = "slateblue"
 
-markdown_table = """
+markdown_table = f"""
 |Star|Rating|
 |:-------------|:-------------|
-|⭐⭐⭐⭐⭐|Well Above Average|
-|⭐⭐⭐⭐|Above Average|
-|⭐⭐⭐|Average|
-|⭐⭐|Below Average|
-|⭐|Well Below Average|
+|{star * 5}|Well Above Average|
+|{star * 4}|Above Average|
+|{star * 3}|Average|
+|{star * 2}|Below Average|
+|{star * 1}|Well Below Average|
 """
 
 markdown_table2 = """
@@ -414,7 +416,7 @@ app.layout = html.Div(
                                 },
                                 {
                                     "id": "P8_BANDING",
-                                    "name": ["👨‍🎓Progress8"],
+                                    "name": ["Progress8"],
                                     "type": "text"
                                 },
                                 {
@@ -638,7 +640,7 @@ app.layout = html.Div(
                                 },
                                 {
                                     "id": "PROGRESS_BAND_ALEV",
-                                    "name": ["👨‍🎓Progress"],
+                                    "name": ["Progress"],
                                     "type": "text"
                                 },
                                 {
@@ -791,7 +793,6 @@ app.layout = html.Div(
 
 # Data Table ----------
 @app.callback(
-
     [
         Output("datatable_pri", "data"),
         Output("datatable_sec", "data"),
@@ -808,7 +809,9 @@ app.layout = html.Div(
         Input("grammar_sch", "value")
     ]
 )
+
 def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
+    print(str(datetime.now()), "[1] start apply filters...")
     # Check for selected school filter
     if selected_school is None or selected_school == []:
         df_pri_1 = df_tbl_pri
@@ -861,27 +864,28 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
 
     df_pri_filtered = df_pri_5.copy().sort_values(by=["SCHNAME"])
 
+    print(str(datetime.now()), "[2] start map rating to stars...")
     if len(df_pri_filtered) == 0:
         pass
     else:
         # Map reading progress to stars
-        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "1"), "READPROG_DESCR"] = "⭐⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "2"), "READPROG_DESCR"] = "⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "3"), "READPROG_DESCR"] = "⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "4"), "READPROG_DESCR"] = "⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "5"), "READPROG_DESCR"] = "⭐"
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "1"), "READPROG_DESCR"] = star * 5
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "2"), "READPROG_DESCR"] = star * 4
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "3"), "READPROG_DESCR"] = star * 3
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "4"), "READPROG_DESCR"] = star * 2
+        df_pri_filtered.loc[(df_pri_filtered.READPROG_DESCR == "5"), "READPROG_DESCR"] = star
         # Map writing progress to stars
-        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "1"), "WRITPROG_DESCR"] = "⭐⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "2"), "WRITPROG_DESCR"] = "⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "3"), "WRITPROG_DESCR"] = "⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "4"), "WRITPROG_DESCR"] = "⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "5"), "WRITPROG_DESCR"] = "⭐"
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "1"), "WRITPROG_DESCR"] = star * 5
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "2"), "WRITPROG_DESCR"] = star * 4
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "3"), "WRITPROG_DESCR"] = star * 3
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "4"), "WRITPROG_DESCR"] = star * 2
+        df_pri_filtered.loc[(df_pri_filtered.WRITPROG_DESCR == "5"), "WRITPROG_DESCR"] = star
         # Map maths progress to stars
-        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "1"), "MATPROG_DESCR"] = "⭐⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "2"), "MATPROG_DESCR"] = "⭐⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "3"), "MATPROG_DESCR"] = "⭐⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "4"), "MATPROG_DESCR"] = "⭐⭐"
-        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "5"), "MATPROG_DESCR"] = "⭐"
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "1"), "MATPROG_DESCR"] = star * 5
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "2"), "MATPROG_DESCR"] = star * 4
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "3"), "MATPROG_DESCR"] = star * 3
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "4"), "MATPROG_DESCR"] = star * 2
+        df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "5"), "MATPROG_DESCR"] = star
 
     df_sec_filtered = df_sec_5.copy().sort_values(by=["SCHNAME"])
 
@@ -889,11 +893,11 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         # Map progress 8 to stars
-        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "1"), "P8_BANDING"] = "⭐⭐⭐⭐⭐"
-        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "2"), "P8_BANDING"] = "⭐⭐⭐⭐"
-        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "3"), "P8_BANDING"] = "⭐⭐⭐"
-        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "4"), "P8_BANDING"] = "⭐⭐"
-        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "5"), "P8_BANDING"] = "⭐"
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "1"), "P8_BANDING"] = star * 5
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "2"), "P8_BANDING"] = star * 4
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "3"), "P8_BANDING"] = star * 3
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "4"), "P8_BANDING"] = star * 2
+        df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "5"), "P8_BANDING"] = star
 
     df_p16_filtered = df_p16_5.copy().sort_values(by=["SCHNAME"])
 
@@ -901,11 +905,11 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         pass
     else:
         # Map progress to stars
-        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "1"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐⭐"
-        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "2"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐⭐"
-        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "3"), "PROGRESS_BAND_ALEV"] = "⭐⭐⭐"
-        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "4"), "PROGRESS_BAND_ALEV"] = "⭐⭐"
-        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "5"), "PROGRESS_BAND_ALEV"] = "⭐"
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "1"), "PROGRESS_BAND_ALEV"] = star * 5
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "2"), "PROGRESS_BAND_ALEV"] = star * 4
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "3"), "PROGRESS_BAND_ALEV"] = star * 3
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "4"), "PROGRESS_BAND_ALEV"] = star * 2
+        df_p16_filtered.loc[(df_p16_filtered.PROGRESS_BAND_ALEV == "5"), "PROGRESS_BAND_ALEV"] = star
 
     df_pri_filtered["INSPECTIONDT"] = pd.to_datetime(df_pri_filtered["INSPECTIONDT"].astype(str),
                                                      format="%Y%m%d").dt.date
@@ -930,6 +934,8 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
     df_pri_updated = df_pri_filtered.to_dict("records")
     df_sec_updated = df_sec_filtered.to_dict("records")
     df_p16_updated = df_p16_filtered.to_dict("records")
+
+    print(str(datetime.now()), "[3] done...")
 
     return df_pri_updated, \
            df_sec_updated, \
