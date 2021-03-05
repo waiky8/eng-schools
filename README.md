@@ -7,9 +7,9 @@ Written in **Dash** that predominately uses **datatables** showing data for each
 Data is from academic year 2018/19, which can be updated easily (at time of writing this is the latest data available).<br><br>
 
 # Data includes:
-  - primary: reading, writing & maths
-  - secondary: progress 8, attainment 8, eng/maths passes
-  - post16: average A-level grade<br><br>
+  - Primary: reading, writing & maths
+  - Secondary: progress 8, attainment 8, eng/maths passes
+  - Post16: average A-level grade<br><br>
 
 # Input options:
 - Select school name, town and postcode
@@ -18,20 +18,20 @@ Data is from academic year 2018/19, which can be updated easily (at time of writ
 Check out https://eng-schools.herokuapp.com/<br><br>
 
 # Description of code and files:
-- app.py - main code
-- step1_get_postcode_district.py - 
-- step2_get_ofsted_rating.py - 
-- step3_get_school_website.py - 
-- step4_get_school_type.py - 
-- step5_get_grammar_schools.py
-- step6_delete_unwanted_columns.py - 
-- england_gcse_alevel_averages.csv - 
-- england_ks2final.csv - 
-- england_ks4final.csv - 
-- england_ks5final.csv - 
-- england_school_information.csv - 
-- grammar_schools.csv - 
-- Grammars-in-England-by-location.xlsx - 
+- **app.py** - main code
+- **step1_get_postcode_district.py** - extract the postcode district (first part of postcode) that can be selected in the application
+- **step2_get_ofsted_rating.py** - extract Ofsted ratings if available
+- **step3_get_school_website.py** - extract website of school if available 
+- **step4_get_school_type.py** - 
+- **step5_get_grammar_schools.py** - 
+- **step6_delete_unwanted_columns.py** - 
+- **england_gcse_alevel_averages.csv** - 
+- **england_ks2final.csv** - contains all relevent data for primary schools (GovUK download)
+- **england_ks4final.csv** - contains all relevent data for secondary schools (GovUK download)
+- **england_ks5final.csv** - contains all relevent data for post 16 schools (GovUK download)
+- **england_school_information.csv** - contains general school data (GovUK download)
+- **grammar_schools.csv** - 
+- **Grammars-in-England-by-location.xlsx** - 
 
 # Sample screenshots:
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.jpg)
