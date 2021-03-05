@@ -7,6 +7,10 @@ import dash_table
 import pandas as pd
 from datetime import datetime
 
+################################################################################
+#  Set up Dash application                                                     #
+################################################################################
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO],
                 meta_tags=[
                     {"name": "viewport",
@@ -17,21 +21,25 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO],
 server = app.server
 app.title = "ENG Schools"
 
-# App parameters
+################################################################################
+#  Parameters and colors used by the application                               #
+################################################################################
+
 datatable_rows = 10
-textcol = "dimgrey"  # text colour
-bgcol = "white"  # background colour of charts, table etc.
+
 fontsize = 15
 
-star = "👨‍🎓"  # "👩‍🎓"
+textcol = "dimgrey"  # text colour
+bgcol = "white"  # background colour of charts, table etc.
+bgcol2 = "ghostwhite"
+col_1 = "teal"
+col_2 = "midnightblue"
+col_3 = "mediumslateblue"
+col_4 = "slateblue"
 
-col_1 = "royalblue"
-col_2 = "slategrey"
-col_3 = "blueviolet"
-col_4 = "cornflowerblue"
-col_5 = "darkmagenta"
-col_6 = "slateblue"
+star = "👨‍🎓"  # used to show ratings
 
+# Markdown tables are used for tooltips
 markdown_table = f"""
 |Star|Rating|
 |:-------------|:-------------|
@@ -54,6 +62,7 @@ markdown_table2 = """
 |SUPP|Suppressed|
 """
 
+# New rows are to show blank row in datatable if no rows meet the selected criteria
 new_row_pri = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "READPROG": "",
                "READPROG_DESCR": "", "WRITPROG": "", "WRITPROG_DESCR": "", "MATPROG": "", "MATPROG_DESCR": "",
                "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": ""}
@@ -65,6 +74,10 @@ new_row_sec = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "
 new_row_p16 = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "VA_INS_ALEV": "",
                "PROGRESS_BAND_ALEV": "", "TALLPPE_ALEV_1618": "", "TALLPPEGRD_ALEV_1618": "", "OFSTEDRATING": "",
                "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GRAMMAR": ""}
+
+################################################################################
+#  Read input files and load lists and variables                               #
+################################################################################
 
 df = pd.read_csv("england_ks2final.csv")
 df_pri = df[df["RECTYPE"].isin(["1", "2"])]  # mainstream & special schools
@@ -86,6 +99,7 @@ school_list.sort()
 town_list = sorted([str(d) for d in df_pri["TOWN"].unique()])
 postcode_list = sorted([str(d) for d in df_pri["PCODE2"].unique()])
 
+# Used to show count of rows found for selected criteria
 pri_recs = len(df_pri.index)
 sec_recs = len(df_sec.index)
 p16_recs = len(df_p16.index)
@@ -94,7 +108,10 @@ df_tbl_pri = df_pri.copy()
 df_tbl_sec = df_sec.copy()
 df_tbl_p16 = df_p16.copy()
 
-# Layout ----------
+################################################################################
+#  Define layout of Dash screen                                                #
+################################################################################
+
 app.layout = html.Div(
     [
         dbc.Row(dbc.Col(html.H1("ENG Schools"), style={"text-align": "center", "font-weight": "bold"})),
@@ -103,64 +120,87 @@ app.layout = html.Div(
 
         html.Br(),
 
-        dbc.Col(dcc.Dropdown(
-            id="school_drop",
-            options=[{"label": i, "value": i} for i in school_list],
-            multi=True,
-            placeholder="Select School",
-            style={"font-size": fontsize, "color": "black", "background-color": "white"}
-        ), style={"padding": "0px 20px 0px 20px"}
+        ################################################################################
+        #  Filters: school, town, post code district                                   #
+        ################################################################################
+
+        html.Div(
+            dbc.Col(
+                [
+                    html.P("Filters:"),
+
+                    dcc.Dropdown(
+                        id="school_drop",
+                        options=[{"label": i, "value": i} for i in school_list],
+                        multi=True,
+                        placeholder="Select School",
+                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                    ),
+
+                    html.Br(),
+
+                    dcc.Dropdown(
+                        id="town_drop",
+                        options=[{"label": i, "value": i} for i in town_list],
+                        multi=True,
+                        placeholder="Select Town",
+                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                    ),
+
+                    html.Br(),
+
+                    dcc.Dropdown(
+                        id="postcode_drop",
+                        options=[{"label": i, "value": i} for i in postcode_list],
+                        multi=True,
+                        placeholder="Select Postcode District",
+                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                    ),
+
+                    html.Br(),
+
+                ], style={"border-style": "groove"}
+            ), style={"padding": "0px 18px 0px 18px"}
         ),
 
         html.Br(),
 
-        dbc.Col(dcc.Dropdown(
-            id="town_drop",
-            options=[{"label": i, "value": i} for i in town_list],
-            multi=True,
-            placeholder="Select Town",
-            style={"font-size": fontsize, "color": "black", "background-color": "white"}
-        ), style={"padding": "0px 20px 0px 20px"}
-        ),
+        ################################################################################
+        #  School type: Independent/Grammar school                                     #
+        ################################################################################
 
-        html.Br(),
-
-        dbc.Col(dcc.Dropdown(
-            id="postcode_drop",
-            options=[{"label": i, "value": i} for i in postcode_list],
-            multi=True,
-            placeholder="Select Postcode District",
-            style={"font-size": fontsize, "color": "black", "background-color": "white"}
-        ), style={"padding": "0px 20px 0px 20px"}
-        ),
-
-        html.Br(),
-
-        dbc.Row(
+        html.Div(
             [
-                dbc.Col(
-                    dcc.Checklist(
-                        id="independent_sch",
-                        options=[
-                            {"label": "Independent School", "value": "GS"},
-                        ],
-                        value=[],
-                        inputStyle={"margin-right": "10px"}
-                    )
-                ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            html.P("School Type:")
+                        ),
 
-                dbc.Col(
-                    dcc.Checklist(
-                        id="grammar_sch",
-                        options=[
-                            {"label": "Grammar School", "value": "GS"},
-                        ],
-                        value=[],
-                        inputStyle={"margin-right": "10px"}
-                    )
+                        dbc.Col(
+                            dcc.Checklist(
+                                id="independent_sch",
+                                options=[
+                                    {"label": "Independent School", "value": "GS"},
+                                ],
+                                value=[],
+                                inputStyle={"margin-right": "10px"}
+                            )
+                        ),
+
+                        dbc.Col(
+                            dcc.Checklist(
+                                id="grammar_sch",
+                                options=[
+                                    {"label": "Grammar School", "value": "GS"},
+                                ],
+                                value=[],
+                                inputStyle={"margin-right": "10px"}
+                            )
+                        )
+                    ], style={"border-style": "groove"}
                 )
-            ],
-            style={"padding": "0px 0px 0px 20px"}
+            ], style={"padding": "0px 30px 0px 30px"}
         ),
 
         html.Br(), html.Br(),
@@ -168,13 +208,21 @@ app.layout = html.Div(
         dbc.Col(html.H6("* hover over table headings for legend"),
                 style={"text-align": "left", "font-style": "italic", "padding": "0px 0px 0px 20px"}),
 
-        dbc.Row(
-            [
-                dbc.Col(html.H3("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
-                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
-            ], style={"padding": "0px 0px 0px 20px"}
+        ################################################################################
+        #  Primary schools datatable                                                   #
+        ################################################################################
+
+        html.Div(
+            dbc.Row(
+                [
+                    dbc.Col(html.H3("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                    dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
+                ], style={"border-style": "groove", "background": bgcol2}
+            ), style={"padding": "0px 30px 0px 30px"}
         ),
+
+        html.Br(),
 
         html.Div(
             [
@@ -183,7 +231,7 @@ app.layout = html.Div(
                     [
                         dash_table.DataTable(
                             id="datatable_pri",
-                            # columns=[{"name": i, "id": i} for i in df_tbl_pri],
+
                             columns=[
                                 {
                                     "id": "SCHNAME",
@@ -318,13 +366,21 @@ app.layout = html.Div(
 
         html.Br(), html.Br(), html.Br(),
 
-        dbc.Row(
-            [
-                dbc.Col(html.H3("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
-                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                dbc.Col(html.H5(sec_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
-            ], style={"padding": "0px 0px 0px 20px"}
+        ################################################################################
+        #  Secondary schools average scores                                            #
+        ################################################################################
+
+        html.Div(
+            dbc.Row(
+                [
+                    dbc.Col(html.H3("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                    dbc.Col(html.H5(sec_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
+                ], style={"border-style": "groove", "background": bgcol2}
+            ), style={"padding": "0px 30px 0px 30px"}
         ),
+
+        html.Br(),
 
         dbc.Row(
             [
@@ -405,6 +461,10 @@ app.layout = html.Div(
             className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
+
+        ################################################################################
+        #  Secondary schools datatable                                                 #
+        ################################################################################
 
         html.Div(
             [
@@ -518,7 +578,8 @@ app.layout = html.Div(
                                 "textDecoration": "underline",
                                 "textDecorationStyle": "dotted",
                             } for col in
-                                ["P8_BANDING", "P8MEA", "ATT8SCR", "PTL2BASICS_95", "PTEBACC_E_PTQ_EE", "EBACCAPS"]],
+                                ["P8_BANDING", "P8MEA", "ATT8SCR", "PTL2BASICS_95", "PTEBACC_E_PTQ_EE",
+                                 "EBACCAPS"]],
 
                             tooltip_header={
                                 "P8_BANDING": {"value": markdown_table, "type": "markdown"},
@@ -588,13 +649,21 @@ app.layout = html.Div(
 
         html.Br(), html.Br(), html.Br(),
 
-        dbc.Row(
-            [
-                dbc.Col(html.H3("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
-                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                dbc.Col(html.H5(p16_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
-            ], style={"padding": "0px 0px 0px 20px"}
+        ################################################################################
+        #  Post 16 schools average scores                                              #
+        ################################################################################
+
+        html.Div(
+            dbc.Row(
+                [
+                    dbc.Col(html.H3("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                    dbc.Col(html.H5(p16_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
+                ], style={"border-style": "groove", "background": bgcol2}
+            ), style={"padding": "0px 30px 0px 30px"}
         ),
+
+        html.Br(),
 
         dbc.Row(
             [
@@ -609,7 +678,7 @@ app.layout = html.Div(
                             )
                         ],
                         style={"color": "white",
-                               "background": col_5,
+                               "background": col_1,
                                "text-align": "center"
                                }
                     )
@@ -626,7 +695,7 @@ app.layout = html.Div(
                             )
                         ],
                         style={"color": "white",
-                               "background": col_6,
+                               "background": col_2,
                                "text-align": "center"
                                }
                     )
@@ -635,6 +704,10 @@ app.layout = html.Div(
             className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
+
+        ################################################################################
+        #  Post 16 schools average scores                                              #
+        ################################################################################
 
         html.Div(
             [
@@ -761,11 +834,11 @@ app.layout = html.Div(
                                 {"if": {"column_id": "TALLPPEGRD_ALEV_1618"},
                                  "textAlign": "center",
                                  "color": "white",
-                                 "backgroundColor": col_5},
+                                 "backgroundColor": col_1},
                                 {"if": {"column_id": "TALLPPE_ALEV_1618"},
                                  "textAlign": "center",
                                  "color": "white",
-                                 "backgroundColor": col_6},
+                                 "backgroundColor": col_2},
                                 {"if": {"column_id": "OFSTEDRATING"}, "textAlign": "center"},
                                 {"if": {"column_id": "INSPECTIONDT"}, "textAlign": "center"},
                                 {"if": {"column_id": "URN"}, "textAlign": "center"},
@@ -809,7 +882,10 @@ app.layout = html.Div(
 )
 
 
-# Data Table ----------
+################################################################################
+#  Callback for all datatables                                                 #
+################################################################################
+
 @app.callback(
     [
         Output("datatable_pri", "data"),
@@ -828,7 +904,6 @@ app.layout = html.Div(
     ]
 )
 def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
-    # global df_tbl_pri, df_tbl_sec, df_tbl_p16
     print(str(datetime.now()), "[1] start apply filters...")
     # Check for selected school filter
     if selected_school is None or selected_school == []:
@@ -967,6 +1042,9 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
            p16_recs
 
 
+################################################################################
+#  Callback for gcse and a-level average scores                                #
+################################################################################
 @app.callback(
     [
         Output("gcse_att8_avg", "children"),
