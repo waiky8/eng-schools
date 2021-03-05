@@ -22,16 +22,16 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 - **step1_get_postcode_district.py** - extract the postcode district (first part of postcode) that can be selected in the application
 - **step2_get_ofsted_rating.py** - extract Ofsted ratings if available
 - **step3_get_school_website.py** - extract website of school if available 
-- **step4_get_school_type.py** - 
-- **step5_get_grammar_schools.py** - 
-- **step6_delete_unwanted_columns.py** - 
-- **england_gcse_alevel_averages.csv** - 
+- **step4_get_school_type.py** - extract school type from **england_school_information.csv**
+- **step5_get_grammar_schools.py** - indicate which are grammar schools by referencing **grammar_schools.csv**
+- **step6_delete_unwanted_columns.py** - remove all unused columns to make data more manageable
+- **england_gcse_alevel_averages.csv** - average scores for gcse and a-level in England
 - **england_ks2final.csv** - contains all relevent data for primary schools (GovUK download)
 - **england_ks4final.csv** - contains all relevent data for secondary schools (GovUK download)
 - **england_ks5final.csv** - contains all relevent data for post 16 schools (GovUK download)
 - **england_school_information.csv** - contains general school data (GovUK download)
-- **grammar_schools.csv** - 
-- **Grammars-in-England-by-location.xlsx** - 
+- **grammar_schools.csv** - list of all grammar schools in England
+- **Grammars-in-England-by-location.xlsx** - list of grammar schools downloaded from the web
 
 # Sample screenshots:
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.jpg)
