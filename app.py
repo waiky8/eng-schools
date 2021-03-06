@@ -171,36 +171,39 @@ app.layout = html.Div(
 
         html.Div(
             [
-                dbc.Row(
+                dbc.Col(
                     [
-                        dbc.Col(
-                            html.P("School Type:")
-                        ),
+                        html.P("School Type:"),
 
-                        dbc.Col(
-                            dcc.Checklist(
-                                id="independent_sch",
-                                options=[
-                                    {"label": "Independent School", "value": "GS"},
-                                ],
-                                value=[],
-                                inputStyle={"margin-right": "10px"}
-                            )
-                        ),
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    dcc.Checklist(
+                                        id="independent_sch",
+                                        options=[
+                                            {"label": "Independent", "value": "GS"},
+                                        ],
+                                        value=[],
+                                        inputStyle={"margin-right": "10px"}
+                                    )
+                                ),
 
-                        dbc.Col(
-                            dcc.Checklist(
-                                id="grammar_sch",
-                                options=[
-                                    {"label": "Grammar School", "value": "GS"},
-                                ],
-                                value=[],
-                                inputStyle={"margin-right": "10px"}
-                            )
+                                dbc.Col(
+                                    dcc.Checklist(
+                                        id="grammar_sch",
+                                        options=[
+                                            {"label": "Grammar", "value": "GS"},
+                                        ],
+                                        value=[],
+                                        inputStyle={"margin-right": "10px"}
+                                    )
+                                )
+                            ]
                         )
                     ], style={"border-style": "groove"}
-                )
-            ], style={"padding": "0px 30px 0px 30px"}
+                ),
+
+            ], style={"padding": "0px 20px 0px 20px"}
         ),
 
         html.Br(), html.Br(),
