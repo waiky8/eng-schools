@@ -65,15 +65,16 @@ markdown_table2 = """
 # New rows are to show blank row in datatable if no rows meet the selected criteria
 new_row_pri = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "READPROG": "",
                "READPROG_DESCR": "", "WRITPROG": "", "WRITPROG_DESCR": "", "MATPROG": "", "MATPROG_DESCR": "",
-               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": ""}
+               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GENDER": "", "RELIGION": ""}
 
 new_row_sec = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "P8MEA": "",
                "P8_BANDING": "", "ATT8SCR": "", "PTL2BASICS_95": "", "EBACCAPS": "", "PTEBACC_E_PTQ_EE": "",
-               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GRAMMAR": ""}
+               "OFSTEDRATING": "", "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GENDER": "", "GRAMMAR": "",
+               "RELIGION": ""}
 
 new_row_p16 = {"RECTYPE": "", "URN": "", "SCHNAME": "", "PCODE": "", "PCODE2": "", "TOWN": "", "VA_INS_ALEV": "",
                "PROGRESS_BAND_ALEV": "", "TALLPPE_ALEV_1618": "", "TALLPPEGRD_ALEV_1618": "", "OFSTEDRATING": "",
-               "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GRAMMAR": ""}
+               "INSPECTIONDT": "", "WEB": "", "SCHTYPE": "", "GENDER": "", "GRAMMAR": "", "RELIGION": ""}
 
 ################################################################################
 #  Read input files and load lists and variables                               #
@@ -179,24 +180,53 @@ app.layout = html.Div(
                             [
                                 dbc.Col(
                                     dcc.Checklist(
-                                        id="independent_sch",
+                                        id="school_type",
                                         options=[
-                                            {"label": "Independent", "value": "GS"},
+                                            {"label": "Independent", "value": "Independent school"},
+                                            {"label": "Maintained", "value": "Maintained school"},
+                                            {"label": "Academy", "value": "Academy"},
+                                            {"label": "College", "value": "College"},
+                                            {"label": "Special", "value": "Special school"}
                                         ],
                                         value=[],
+                                        labelStyle={"display": "block"},
                                         inputStyle={"margin-right": "10px"}
                                     )
                                 ),
 
                                 dbc.Col(
-                                    dcc.Checklist(
-                                        id="grammar_sch",
-                                        options=[
-                                            {"label": "Grammar", "value": "GS"},
-                                        ],
-                                        value=[],
-                                        inputStyle={"margin-right": "10px"}
-                                    )
+                                    [
+                                        dcc.Checklist(
+                                            id="grammar_sch",
+                                            options=[
+                                                {"label": "Grammar", "value": "GS"},
+                                            ],
+                                            value=[],
+                                            inputStyle={"margin-right": "10px"}
+                                        ),
+
+                                        dcc.Checklist(
+                                            id="gender",
+                                            options=[
+                                                {"label": "Boys", "value": "Boys"},
+                                                {"label": "Girls", "value": "Girls"},
+                                                {"label": "Mixed", "value": "Mixed"}
+                                            ],
+                                            value=[],
+                                            labelStyle={"display": "block"},
+                                            inputStyle={"margin-right": "10px"}
+                                        ),
+
+                                        dcc.Checklist(
+                                            id="religion",
+                                            options=[
+                                                {"label": "Religion", "value": "Religion"}
+                                            ],
+                                            value=[],
+                                            labelStyle={"display": "block"},
+                                            inputStyle={"margin-right": "10px"}
+                                        )
+                                    ]
                                 )
                             ]
                         )
@@ -218,7 +248,7 @@ app.layout = html.Div(
         html.Div(
             dbc.Row(
                 [
-                    dbc.Col(html.H3("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H4("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
                     dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
                     dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
                 ], style={"border-style": "groove", "background": bgcol2}
@@ -274,6 +304,16 @@ app.layout = html.Div(
                                 {
                                     "id": "SCHTYPE",
                                     "name": ["School Type"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "GENDER",
+                                    "name": ["Gender"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "RELIGION",
+                                    "name": ["Religion"],
                                     "type": "text"
                                 },
                                 {
@@ -376,7 +416,7 @@ app.layout = html.Div(
         html.Div(
             dbc.Row(
                 [
-                    dbc.Col(html.H3("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H4("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
                     dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
                     dbc.Col(html.H5(sec_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
                 ], style={"border-style": "groove", "background": bgcol2}
@@ -539,6 +579,16 @@ app.layout = html.Div(
                                     "type": "text"
                                 },
                                 {
+                                    "id": "GENDER",
+                                    "name": ["Gender"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "RELIGION",
+                                    "name": ["Religion"],
+                                    "type": "text"
+                                },
+                                {
                                     "id": "TOWN",
                                     "name": ["Town"],
                                     "type": "text"
@@ -659,7 +709,7 @@ app.layout = html.Div(
         html.Div(
             dbc.Row(
                 [
-                    dbc.Col(html.H3("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
+                    dbc.Col(html.H4("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
                     dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
                     dbc.Col(html.H5(p16_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
                 ], style={"border-style": "groove", "background": bgcol2}
@@ -764,6 +814,16 @@ app.layout = html.Div(
                                 {
                                     "id": "GRAMMAR",
                                     "name": ["Grammar"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "GENDER",
+                                    "name": ["Gender"],
+                                    "type": "text"
+                                },
+                                {
+                                    "id": "RELIGION",
+                                    "name": ["Religion"],
                                     "type": "text"
                                 },
                                 {
@@ -902,11 +962,17 @@ app.layout = html.Div(
         Input("school_drop", "value"),
         Input("town_drop", "value"),
         Input("postcode_drop", "value"),
-        Input("independent_sch", "value"),
-        Input("grammar_sch", "value")
+        Input("school_type", "value"),
+        Input("grammar_sch", "value"),
+        Input("gender", "value"),
+        Input("religion", "value")
     ]
 )
-def update_datatable(selected_school, selected_area, selected_postcode, selected_independent, selected_grammar):
+def update_datatable(selected_school, selected_area, selected_postcode, selected_schtype, selected_grammar,
+                     selected_gender, selected_religion):
+    ################################################################################
+    #  Apply selected filters                                                      #
+    ################################################################################
     print(str(datetime.now()), "[1] start apply filters...")
     # Check for selected school filter
     if selected_school is None or selected_school == []:
@@ -939,14 +1005,14 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_p16_3 = df_p16_2[df_p16_2["PCODE2"].isin(selected_postcode)]
 
     # Check for selected independent school filter
-    if selected_independent is None or selected_independent == []:
+    if selected_schtype is None or selected_schtype == []:
         df_pri_4 = df_pri_3
         df_sec_4 = df_sec_3
         df_p16_4 = df_p16_3
     else:
-        df_pri_4 = df_pri_3[df_pri_3["SCHTYPE"].isin(["Independent school"])]
-        df_sec_4 = df_sec_3[df_sec_3["SCHTYPE"].isin(["Independent school"])]
-        df_p16_4 = df_p16_3[df_p16_3["SCHTYPE"].isin(["Independent school"])]
+        df_pri_4 = df_pri_3[df_pri_3["SCHTYPE"].isin(selected_schtype)]
+        df_sec_4 = df_sec_3[df_sec_3["SCHTYPE"].isin(selected_schtype)]
+        df_p16_4 = df_p16_3[df_p16_3["SCHTYPE"].isin(selected_schtype)]
 
     # Check for selected grammar school filter
     if (selected_grammar is None or selected_grammar == []):
@@ -958,8 +1024,33 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_sec_5 = df_sec_4[df_sec_4["GRAMMAR"].isin(["Yes"])]
         df_p16_5 = df_p16_4[df_p16_4["GRAMMAR"].isin(["Yes"])]
 
-    df_pri_filtered = df_pri_5.copy().sort_values(by=["SCHNAME"])
+    # Check for selected gender filter
+    if (selected_gender is None or selected_gender == []):
+        df_pri_6 = df_pri_5
+        df_sec_6 = df_sec_5
+        df_p16_6 = df_p16_5
+    else:
+        df_pri_6 = df_pri_5[df_pri_5["GENDER"].isin(selected_gender)]
+        df_sec_6 = df_sec_5[df_sec_5["GENDER"].isin(selected_gender)]
+        df_p16_6 = df_p16_5[df_p16_5["GENDER"].isin(selected_gender)]
 
+    # Check for selected religion filter
+    if (selected_religion is None or selected_religion == []):
+        df_pri_7 = df_pri_6
+        df_sec_7 = df_sec_6
+        df_p16_7 = df_p16_6
+    else:
+        df_pri_7 = df_pri_6[~df_pri_6["RELIGION"].isin(["Does not apply", "None", ""])]
+        df_sec_7 = df_sec_6[~df_sec_6["RELIGION"].isin(["Does not apply", "None", ""])]
+        df_p16_7 = df_p16_6[~df_p16_6["RELIGION"].isin(["Does not apply", "None", ""])]
+
+    df_pri_filtered = df_pri_7.copy().sort_values(by=["SCHNAME"])
+    df_sec_filtered = df_sec_7.copy().sort_values(by=["SCHNAME"])
+    df_p16_filtered = df_p16_7.copy().sort_values(by=["SCHNAME"])
+
+    ################################################################################
+    #  Mapping for ratings to be displayed                                         #
+    ################################################################################
     print(str(datetime.now()), "[2] start map rating to stars...")
     if len(df_pri_filtered) == 0:
         pass
@@ -983,8 +1074,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "4"), "MATPROG_DESCR"] = star * 2
         df_pri_filtered.loc[(df_pri_filtered.MATPROG_DESCR == "5"), "MATPROG_DESCR"] = star
 
-    df_sec_filtered = df_sec_5.copy().sort_values(by=["SCHNAME"])
-
     if len(df_sec_filtered) == 0:
         pass
     else:
@@ -994,8 +1083,6 @@ def update_datatable(selected_school, selected_area, selected_postcode, selected
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "3"), "P8_BANDING"] = star * 3
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "4"), "P8_BANDING"] = star * 2
         df_sec_filtered.loc[(df_sec_filtered.P8_BANDING == "5"), "P8_BANDING"] = star
-
-    df_p16_filtered = df_p16_5.copy().sort_values(by=["SCHNAME"])
 
     if len(df_p16_filtered) == 0:
         pass
