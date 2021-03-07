@@ -24,8 +24,8 @@ def main():
 
             print(r, urn, stype, gender, religion)
 
-        # df["SCHTYPE"] = sch_type
-        # df["GENDER"] = sch_gender
+        df["SCHTYPE"] = sch_type
+        df["GENDER"] = sch_gender
         df["RELIGION"] = sch_religion
 
         df.to_csv(f, index=False, encoding="utf-8")
