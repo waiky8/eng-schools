@@ -129,12 +129,6 @@ app.layout = html.Div(
 
         html.Br(),
 
-        '''
-        ----------------
-        DROPDOWN FILTERS
-        ----------------
-        ''',
-
         html.Div(
             dbc.Col(
                 [
@@ -175,12 +169,6 @@ app.layout = html.Div(
         ),
 
         html.Br(),
-
-        '''
-        ----------------------
-        SCHOOL TYPE CHECKBOXES
-        ----------------------
-        ''',
 
         html.Div(
             [
@@ -254,12 +242,6 @@ app.layout = html.Div(
             html.H6("* hover over table headings for legend"),
             style={"text-align": "left", "font-style": "italic", "padding": "0px 0px 0px 20px"}
         ),
-
-        '''
-        ------------------------
-        PRIMARY SCHOOL DATATABLE
-        ------------------------
-        ''',
 
         html.Div(
             dbc.Row(
@@ -426,12 +408,6 @@ app.layout = html.Div(
 
         html.Br(), html.Br(), html.Br(),
 
-        '''
-        ------------------------------------
-        SECONDARY SCHOOL AVERAGE PERFORMANCE
-        ------------------------------------
-        ''',
-
         html.Div(
             dbc.Row(
                 [
@@ -527,12 +503,6 @@ app.layout = html.Div(
             className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
-
-        '''
-        --------------------------
-        SECONDARY SCHOOL DATATABLE
-        --------------------------
-        ''',
 
         html.Div(
             [
@@ -749,12 +719,6 @@ app.layout = html.Div(
 
         html.Br(), html.Br(), html.Br(),
 
-        '''
-        ----------------------------------
-        POST 16 SCHOOL AVERAGE PERFORMANCE
-        ----------------------------------
-        ''',
-
         html.Div(
             dbc.Row(
                 [
@@ -808,12 +772,6 @@ app.layout = html.Div(
             className="mb-3",
             style={"padding": "0px 20px 0px 20px"}
         ),
-
-        '''
-        ------------------------
-        POST 16 SCHOOL DATATABLE
-        ------------------------
-        ''',
 
         html.Div(
             [
