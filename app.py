@@ -1014,7 +1014,7 @@ CALLBACK FOR DATATABLE
         Input("religion", "value")
     ]
 )
-def update_datatable(selected_school, selected_area, selected_postcode, selected_schtype, selected_grammar,
+def return_datatable(selected_school, selected_area, selected_postcode, selected_schtype, selected_grammar,
                      selected_gender, selected_religion):
     print(str(datetime.now()), "[1] start apply filters...")
 
@@ -1179,7 +1179,7 @@ CALLBACK FOR AVERAGE GCSE & A-LEVEL PERFORMANCES
     ],
     Input("dummy", "children")
 )
-def average_scores(none):
+def return_scores(none):
     gcse_att8 = df_eng_avg["GCSEATT8"][0]
     gcse_eng_maths_grade5 = df_eng_avg["GCSEENGMAT5"][0]
     gcse_enter_ebaccs = df_eng_avg["EBACCENT"][0]
