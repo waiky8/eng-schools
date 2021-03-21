@@ -27,20 +27,22 @@ def main():
             ofsted = df["OFSTEDRATING"][r]
 
             if ofsted == "Outstanding":
-                c1 = "green"
+                c1 = "limegreen"
             elif ofsted in ["Good", "Satisfactory"]:
-                c1 = "blue"
+                c1 = "dodgerblue"
             elif ofsted == "Requires Improvement":
+                c1 = "orangered"
+            elif ofsted == "Inadequate":
                 c1 = "red"
             else:
-                c1 = "grey"
+                c1 = "gold"
 
             if f == "england_ks2final.csv":
-                c2 = "green"
+                c2 = "limegreen"
             elif f == "england_ks4final.csv":
-                c2 = "blue"
+                c2 = "dodgerblue"
             else:
-                c2 = "purple"
+                c2 = "blueviolet"
 
             colour1.append(c1)
             colour2.append(c2)
