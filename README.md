@@ -21,13 +21,13 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 
 # Description of code and files:
 - **app.py** - main code
-- **step0_delete_unwanted_columns.py** - remove all unused columns to make data more manageable<br><br>
+- **step0_delete_unwanted_columns.py** - remove all unused columns to make data more manageable
 - **step1_get_postcode_district.py** - extract the postcode district (first part of postcode) that can be selected in the application
 - **step2_get_ofsted_rating.py** - extract Ofsted ratings if available
 - **step3_get_school_website.py** - extract website of school if available 
 - **step4_get_school_type.py** - extract school type from **england_school_information.csv**
 - **step5_get_grammar_schools.py** - indicate which are grammar schools by referencing **grammar_schools.csv**
-- **step6_get_lat_long.py** - get school latitude & longitude (from https://www.doogal.co.uk/) for map markers<br><br>
+- **step6_get_lat_long.py** - get school latitude & longitude (from https://www.doogal.co.uk/) for map markers
 - **step7_get_colour.py** - set ofsted ratings colour code for map markers<br><br>
 
 - **england_ks2final.csv** - contains all relevent data for primary schools (GovUK download)
