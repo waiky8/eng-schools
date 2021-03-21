@@ -28,8 +28,7 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 - **step4_get_school_type.py** - extract school type from **england_school_information.csv**
 - **step5_get_grammar_schools.py** - indicate which are grammar schools by referencing **grammar_schools.csv**
 - **step6_get_lat_long.py** - get school latitude & longitude (from https://www.doogal.co.uk/) for map markers
-- **step7_get_colour.py** - set ofsted ratings colour code for map markers<br><br>
-
+- **step7_get_colour.py** - set ofsted ratings colour code for map markers
 - **england_ks2final.csv** - contains all relevent data for primary schools (GovUK download)
 - **england_ks4final.csv** - contains all relevent data for secondary schools (GovUK download)
 - **england_ks5final.csv** - contains all relevent data for post 16 schools (GovUK download)
