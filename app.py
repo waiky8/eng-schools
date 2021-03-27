@@ -7,6 +7,7 @@ import dash_table
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+from configparser import ConfigParser
 from datetime import datetime
 
 '''
@@ -25,7 +26,9 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO],
 server = app.server
 app.title = "ENG Schools"
 
-mapbox_access_token = "enter token here"
+config = ConfigParser()
+config.read("config.ini")
+mapbox_access_token = config["mapbox"]["secret_token"]
 
 '''
 ==============
