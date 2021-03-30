@@ -15,7 +15,7 @@ Data is for academic year 2018/19, which can be updated easily in future (at tim
 
 # Input options:
 - Select school name, education phase, ofsted rating, town and postcode
-- Filter by independent and grammar schools<br><br>
+- Filter by school type (academy, grammar, independent etc.) as well as gender & religion<br><br>
 
 Check out https://eng-schools.herokuapp.com/<br><br>
 
