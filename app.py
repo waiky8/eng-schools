@@ -1107,7 +1107,7 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
         df1_sec = df_sec[df_sec["SCHNAME"].isin(selected_school)]
         df1_p16 = df_p16[df_p16["SCHNAME"].isin(selected_school)]
 
-    # Check for selected education level
+    # Check for selected education level filter
     if selected_edu is None or selected_edu == []:
         pass
     else:
@@ -1115,7 +1115,7 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
         df1_sec = df1_sec[df1_sec["PHASE"].isin(selected_edu)]
         df1_p16 = df1_p16[df1_p16["PHASE"].isin(selected_edu)]
 
-    # Check for selected ofsted rating
+    # Check for selected ofsted rating filter
     if selected_ratings is None or selected_ratings == []:
         pass
     else:
