@@ -14,7 +14,7 @@ Data is for academic year 2018/19, which can be updated easily in future (at tim
   - Post16: average A-level grade<br><br>
 
 # Input options:
-- Select school name, town and postcode
+- Select school name, education phase, ofsted rating, town and postcode
 - Filter by independent and grammar schools<br><br>
 
 Check out https://eng-schools.herokuapp.com/<br><br>
