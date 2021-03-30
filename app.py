@@ -158,7 +158,7 @@ app.layout = html.Div(
                         id="edu_drop",
                         options=[{"label": i, "value": i} for i in edu_list],
                         multi=True,
-                        placeholder="Select Edu Level"
+                        placeholder="Select Education Phase"
                     ),
 
                     html.Br(),
@@ -1107,7 +1107,7 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
         df1_sec = df_sec[df_sec["SCHNAME"].isin(selected_school)]
         df1_p16 = df_p16[df_p16["SCHNAME"].isin(selected_school)]
 
-    # Check for selected education level filter
+    # Check for selected education phase filter
     if selected_edu is None or selected_edu == []:
         pass
     else:
