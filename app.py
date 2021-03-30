@@ -83,18 +83,21 @@ pri_recs = len(df_pri.index)
 sec_recs = len(df_sec.index)
 p16_recs = len(df_p16.index)
 
+edu_list = ["Primary", "Secondary", "Post16"]
+ratings_list = ["Outstanding", "Good", "Satisfactory", "Requires Improvement", "Inadequate"]
+
 datatable_rows = 10
 fontsize = 15
 
 textcol = "dimgrey"
 bgcol = "white"
-bgcol2 = "ghostwhite"
+bgcol2 = "whitesmoke"
 col_1 = "teal"
 col_2 = "midnightblue"
 col_3 = "mediumslateblue"
 col_4 = "slateblue"
 
-star = "👨‍🎓"  # used for ratings display
+star = "⭐"  # used for ratings display "👨‍🎓"
 
 # Markdown tables used for tooltips
 markdown_table = f"""
@@ -146,8 +149,25 @@ app.layout = html.Div(
                         id="school_drop",
                         options=[{"label": i, "value": i} for i in school_list],
                         multi=True,
-                        placeholder="Select School",
-                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                        placeholder="Select School"
+                    ),
+
+                    html.Br(),
+
+                    dcc.Dropdown(
+                        id="edu_drop",
+                        options=[{"label": i, "value": i} for i in edu_list],
+                        multi=True,
+                        placeholder="Select Edu Level"
+                    ),
+
+                    html.Br(),
+
+                    dcc.Dropdown(
+                        id="ratings_drop",
+                        options=[{"label": i, "value": i} for i in ratings_list],
+                        multi=True,
+                        placeholder="Select Ofsted Rating"
                     ),
 
                     html.Br(),
@@ -156,8 +176,7 @@ app.layout = html.Div(
                         id="town_drop",
                         options=[{"label": i, "value": i} for i in town_list],
                         multi=True,
-                        placeholder="Select Town",
-                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                        placeholder="Select Town"
                     ),
 
                     html.Br(),
@@ -167,12 +186,11 @@ app.layout = html.Div(
                         options=[{"label": i, "value": i} for i in postcode_list],
                         multi=True,
                         placeholder="Select Postcode District",
-                        style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
+                        # style={"font-size": fontsize, "color": "black", "background-color": bgcol2}
                     ),
 
                     html.Br(),
-
-                ], style={"border-style": "groove"}
+                ], style={"background-color": bgcol2}
             ), style={"padding": "0px 18px 0px 18px"}
         ),
 
@@ -238,9 +256,8 @@ app.layout = html.Div(
                                 )
                             ]
                         )
-                    ], style={"border-style": "groove"}
-                ),
-
+                    ], style={"background-color": bgcol2}
+                )
             ], style={"padding": "0px 20px 0px 20px"}
         ),
 
@@ -264,13 +281,24 @@ app.layout = html.Div(
         ),
 
         html.Div(
-            dbc.Row(
-                [
-                    dbc.Col(html.H4("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
-                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                    dbc.Col(html.H5(pri_recs), id="pri_recs", style={"text-align": "left", "font-weight": "bold"})
-                ], style={"border-style": "groove", "background": bgcol2}
-            ), style={"padding": "0px 30px 0px 30px"}
+            [
+                html.Div(
+                    [
+                        html.Br(),
+
+                        dbc.Row(
+                            [
+                                dbc.Col(html.H4("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
+                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                                dbc.Col(html.H5(pri_recs), id="pri_recs",
+                                        style={"text-align": "left", "font-weight": "bold"})
+                            ]
+                        ),
+
+                        html.Br()
+                    ], style={"background": bgcol2}
+                )
+            ], style={"padding": "0px 30px 0px 30px"}
         ),
 
         html.Br(),
@@ -368,7 +396,7 @@ app.layout = html.Div(
                         style_header={
                             "bold": True,
                             "color": "black",
-                            "backgroundColor": "lightgrey",
+                            "backgroundColor": bgcol2,
                             "whiteSpace": "normal",
                             "height": "64px"
                         },
@@ -429,13 +457,24 @@ app.layout = html.Div(
         html.Br(), html.Br(), html.Br(),
 
         html.Div(
-            dbc.Row(
-                [
-                    dbc.Col(html.H4("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
-                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                    dbc.Col(html.H5(sec_recs), id="sec_recs", style={"text-align": "left", "font-weight": "bold"})
-                ], style={"border-style": "groove", "background": bgcol2}
-            ), style={"padding": "0px 30px 0px 30px"}
+            [
+                html.Div(
+                    [
+                        html.Br(),
+
+                        dbc.Row(
+                            [
+                                dbc.Col(html.H4("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
+                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                                dbc.Col(html.H5(pri_recs), id="sec_recs",
+                                        style={"text-align": "left", "font-weight": "bold"})
+                            ]
+                        ),
+
+                        html.Br()
+                    ], style={"background": bgcol2}
+                )
+            ], style={"padding": "0px 30px 0px 30px"}
         ),
 
         html.Br(),
@@ -636,7 +675,7 @@ app.layout = html.Div(
                         style_header={
                             "bold": True,
                             "color": "black",
-                            "backgroundColor": "lightgrey",
+                            "backgroundColor": bgcol2,
                             "whiteSpace": "normal",
                             "height": "64px"
                         },
@@ -740,13 +779,24 @@ app.layout = html.Div(
         html.Br(), html.Br(), html.Br(),
 
         html.Div(
-            dbc.Row(
-                [
-                    dbc.Col(html.H4("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
-                    dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                    dbc.Col(html.H5(p16_recs), id="p16_recs", style={"text-align": "left", "font-weight": "bold"})
-                ], style={"border-style": "groove", "background": bgcol2}
-            ), style={"padding": "0px 30px 0px 30px"}
+            [
+                html.Div(
+                    [
+                        html.Br(),
+
+                        dbc.Row(
+                            [
+                                dbc.Col(html.H4("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
+                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
+                                dbc.Col(html.H5(pri_recs), id="p16_recs",
+                                        style={"text-align": "left", "font-weight": "bold"})
+                            ]
+                        ),
+
+                        html.Br()
+                    ], style={"background": bgcol2}
+                )
+            ], style={"padding": "0px 30px 0px 30px"}
         ),
 
         html.Br(),
@@ -891,7 +941,7 @@ app.layout = html.Div(
                         style_header={
                             "bold": True,
                             "color": "black",
-                            "backgroundColor": "lightgrey",
+                            "backgroundColor": bgcol2,
                             "whiteSpace": "normal",
                             "height": "64px"
                         },
@@ -1027,6 +1077,8 @@ CALLBACK FOR DATATABLE & MAP
     ],
     [
         Input("school_drop", "value"),
+        Input("edu_drop", "value"),
+        Input("ratings_drop", "value"),
         Input("town_drop", "value"),
         Input("postcode_drop", "value"),
         Input("school_type", "value"),
@@ -1035,8 +1087,8 @@ CALLBACK FOR DATATABLE & MAP
         Input("religion", "value")
     ]
 )
-def return_datatable(selected_school, selected_area, selected_postcode, selected_schtype, selected_grammar,
-                     selected_gender, selected_religion):
+def return_datatable(selected_school, selected_edu, selected_ratings, selected_area, selected_postcode,
+                     selected_schtype, selected_grammar, selected_gender, selected_religion):
     # print(str(datetime.now()), "[1] start apply filters...")
 
     '''
@@ -1054,6 +1106,22 @@ def return_datatable(selected_school, selected_area, selected_postcode, selected
         df1_pri = df_pri[df_pri["SCHNAME"].isin(selected_school)]
         df1_sec = df_sec[df_sec["SCHNAME"].isin(selected_school)]
         df1_p16 = df_p16[df_p16["SCHNAME"].isin(selected_school)]
+
+    # Check for selected education level
+    if selected_edu is None or selected_edu == []:
+        pass
+    else:
+        df1_pri = df1_pri[df1_pri["PHASE"].isin(selected_edu)]
+        df1_sec = df1_sec[df1_sec["PHASE"].isin(selected_edu)]
+        df1_p16 = df1_p16[df1_p16["PHASE"].isin(selected_edu)]
+
+    # Check for selected ofsted rating
+    if selected_ratings is None or selected_ratings == []:
+        pass
+    else:
+        df1_pri = df1_pri[df1_pri["OFSTEDRATING"].isin(selected_ratings)]
+        df1_sec = df1_sec[df1_sec["OFSTEDRATING"].isin(selected_ratings)]
+        df1_p16 = df1_p16[df1_p16["OFSTEDRATING"].isin(selected_ratings)]
 
     # Check for selected town filter
     if selected_area is None or selected_area == []:
