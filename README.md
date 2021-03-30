@@ -39,8 +39,8 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 
 
 # Sample screenshots:
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_1.jpg)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_2.jpg)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_3.jpg)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_4.jpg)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot_5.jpg)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot1.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot2.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot3.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot4.png)
+![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot5.png)
