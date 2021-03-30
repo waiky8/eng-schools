@@ -4,7 +4,7 @@ I was struggling to find a website where I can compare the ratings and performan
 
 Written in **Dash** that predominately uses **datatables** to show data for each of the 3 main phases of education (primary, secondary and post 16).<br><br>
 
-**Mapbox** is used to show school locations that display additional information when you hover over or click on the markers.
+**Mapbox** is used to show school locations with markers and hover text.
 
 Data is for academic year 2018/19, which can be updated easily in future (at time of writing this is the latest data available).<br><br>
 
