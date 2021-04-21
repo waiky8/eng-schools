@@ -39,13 +39,11 @@ READ CSV FILES
 # df_pri = pd.read_csv("england_ks2final.csv")
 # df_sec = pd.read_csv("england_ks4final.csv")
 # df_p16 = pd.read_csv("england_ks5final.csv")
-
 # df_eng_avg = pd.read_csv("england_gcse_alevel_averages.csv")
 
 df_pri = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks2final.csv?raw=true")
 df_sec = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks4final.csv?raw=true")
 df_p16 = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks5final.csv?raw=true")
-
 df_eng_avg = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_gcse_alevel_averages.csv?raw=true")
 
 '''
@@ -87,7 +85,7 @@ edu_list = ["Primary", "Secondary", "Post16"]
 ratings_list = ["Outstanding", "Good", "Satisfactory", "Requires Improvement", "Inadequate"]
 
 datatable_rows = 10
-fontsize = 15
+fontsize = 12
 
 textcol = "dimgrey"
 bgcol = "white"
@@ -96,6 +94,7 @@ col_1 = "teal"
 col_2 = "midnightblue"
 col_3 = "mediumslateblue"
 col_4 = "slateblue"
+col_5 = "navy"
 
 star = "⭐"  # used for ratings display "👨‍🎓"
 
@@ -103,23 +102,23 @@ star = "⭐"  # used for ratings display "👨‍🎓"
 markdown_table = f"""
 |Star|Rating|
 |:-------------|:-------------|
-|{star * 5}|Well Above Average|
-|{star * 4}|Above Average|
-|{star * 3}|Average|
-|{star * 2}|Below Average|
-|{star * 1}|Well Below Average|
+|{star * 5}| Well Above Average|
+|{star * 4}| Above Average|
+|{star * 3}| Average|
+|{star * 2}| Below Average|
+|{star * 1}| Well Below Average|
 """
 
 markdown_table2 = """
 |Abbr|Meaning|
 |:-------------|:-------------|
-|LOWCONV|Low Coverage|
-|NA|Not Applicable|
-|NE|No Entries|
-|NEW|New School|
-|NP|Not Published|
-|SP|Small Percentage|
-|SUPP|Suppressed|
+|LOWCONV| Low Coverage|
+|NA| Not Applicable|
+|NE| No Entries|
+|NEW| New School|
+|NP| Not Published|
+|SP| Small Percentage|
+|SUPP| Suppressed|
 """
 
 '''
@@ -288,17 +287,16 @@ app.layout = html.Div(
 
                         dbc.Row(
                             [
-                                dbc.Col(html.H4("PRIMARY"), style={"text-align": "center", "font-weight": "bold"}),
-                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                                dbc.Col(html.H5(pri_recs), id="pri_recs",
-                                        style={"text-align": "left", "font-weight": "bold"})
+                                dbc.Col(html.H3("PRIMARY"), style={"text-align": "center"}),
+                                dbc.Col(html.H4("Total: "), style={"text-align": "right"}),
+                                dbc.Col(html.H4(pri_recs), id="pri_recs", style={"text-align": "left"})
                             ]
                         ),
 
                         html.Br()
-                    ], style={"background": bgcol2}
+                    ], style={"color": "white", "background": col_5}
                 )
-            ], style={"padding": "0px 30px 0px 30px"}
+            ], style={"padding": "0px 20px 0px 20px"}
         ),
 
         html.Br(),
@@ -464,17 +462,16 @@ app.layout = html.Div(
 
                         dbc.Row(
                             [
-                                dbc.Col(html.H4("SECONDARY"), style={"text-align": "center", "font-weight": "bold"}),
-                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                                dbc.Col(html.H5(pri_recs), id="sec_recs",
-                                        style={"text-align": "left", "font-weight": "bold"})
+                                dbc.Col(html.H3("SECONDARY"), style={"text-align": "center"}),
+                                dbc.Col(html.H4("Total: "), style={"text-align": "right"}),
+                                dbc.Col(html.H4(sec_recs), id="sec_recs", style={"text-align": "left"})
                             ]
                         ),
 
                         html.Br()
-                    ], style={"background": bgcol2}
+                    ], style={"color": "white", "background": col_5}
                 )
-            ], style={"padding": "0px 30px 0px 30px"}
+            ], style={"padding": "0px 20px 0px 20px"}
         ),
 
         html.Br(),
@@ -786,17 +783,16 @@ app.layout = html.Div(
 
                         dbc.Row(
                             [
-                                dbc.Col(html.H4("POST 16"), style={"text-align": "center", "font-weight": "bold"}),
-                                dbc.Col(html.H5("Total: "), style={"text-align": "right", "font-weight": "bold"}),
-                                dbc.Col(html.H5(pri_recs), id="p16_recs",
-                                        style={"text-align": "left", "font-weight": "bold"})
+                                dbc.Col(html.H3("POST 16"), style={"text-align": "center"}),
+                                dbc.Col(html.H4("Total: "), style={"text-align": "right"}),
+                                dbc.Col(html.H4(p16_recs), id="p16_recs", style={"text-align": "left"})
                             ]
                         ),
 
                         html.Br()
-                    ], style={"background": bgcol2}
+                    ], style={"color": "white", "background": col_5}
                 )
-            ], style={"padding": "0px 30px 0px 30px"}
+            ], style={"padding": "0px 20px 0px 20px"}
         ),
 
         html.Br(),
@@ -1322,7 +1318,7 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
                 lon=lon_mean  # -1.5198966
             ),
             pitch=0,
-            zoom=12,
+            zoom=10,
             style="streets"  # satellite, outdoors, light, dark
         ),
         hoverlabel=dict(
