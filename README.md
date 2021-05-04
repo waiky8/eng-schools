@@ -22,7 +22,7 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 # Description of code and files:
 - **app.py** - main code
 - **step0_delete_unwanted_columns.py** - remove all unused columns to make data more manageable
-- **step1_get_postcode_district.py** - extract the postcode district (first part of postcode) that can be selected in the application
+- **step1_get_postcode_district.py** - extract the postcode district (first part of postcode) that can then be selected in the application
 - **step2_get_ofsted_rating.py** - extract Ofsted ratings if available
 - **step3_get_school_website.py** - extract website of school if available 
 - **step4_get_school_type.py** - extract school type from **england_school_information.csv**
