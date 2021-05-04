@@ -33,7 +33,7 @@ Check out https://eng-schools.herokuapp.com/<br><br>
 - **england_ks4final.csv** - contains all relevent data for secondary schools (GovUK download)
 - **england_ks5final.csv** - contains all relevent data for post 16 schools (GovUK download)
 - **england_school_information.csv** - contains general school data (GovUK download)
-- **england_gcse_alevel_averages.csv** - average scores for gcse and a-level in England
+- **england_gcse_alevel_averages.csv** - average scores for gcse and a-level in England (obtained by querying performance of any suitable school)
 - **Grammars-in-England-by-location.xlsx** - list of grammar schools downloaded from the web
 - **grammar_schools.csv** - list of all grammar schools in England extracted from **Grammars-in-England-by-location.xlsx**
 
