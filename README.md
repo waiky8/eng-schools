@@ -1,6 +1,6 @@
 # English Schools
 
-I was struggling to find a website where I can compare the ratings and performance of schools in England - ok there is the government one but not so friendly to navigate. This is my attempt at bringing the Ofsted ratings and schools performance into one place that is not bloated with a million different pieces of information.<br><br>
+I was struggling to find a website where I can compare the ratings and performance of schools in England - ok there is the government one but I found it not so friendly to navigate. This is my attempt at bringing the Ofsted ratings and schools performance into one place that is not bloated with a million different pieces of information.<br><br>
 
 Written in **Dash** that predominately uses **datatables** to show data for each of the 3 main phases of education (primary, secondary and post 16).<br><br>
 
