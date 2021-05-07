@@ -8,6 +8,8 @@ Written in **Dash** that predominately uses **datatables** to show data for each
 
 Data is for academic year 2018/19, which can be updated easily in future (at time of writing this is the latest data available).<br><br>
 
+The application is uploaded to **Heroku**. Check out https://eng-schools.herokuapp.com/<br><br>
+
 # Data includes:
   - Primary: reading, writing & maths
   - Secondary: progress 8, attainment 8, eng/maths passes
@@ -16,8 +18,6 @@ Data is for academic year 2018/19, which can be updated easily in future (at tim
 # Input options:
 - Select school name, education phase, ofsted rating, town and postcode
 - Filter by school type (academy, grammar, independent etc.) as well as gender & religion<br><br>
-
-Check out https://eng-schools.herokuapp.com/<br><br>
 
 # Description of code and files:
 - **app.py** - main code
