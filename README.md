@@ -10,7 +10,7 @@ Data is for academic year 2018/19, which can be updated easily in future (at tim
 
 The application is uploaded to **Heroku**. Check out https://eng-schools.herokuapp.com/<br><br>
 
-# Reatures:
+# Features:
   - Primary: reading, writing & maths performance
   - Secondary: progress 8, attainment 8, eng/maths passes
   - Post16: average A-level grade
