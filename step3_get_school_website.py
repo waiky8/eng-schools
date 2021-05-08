@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import bs4 as bs
 import urllib.request
 import datetime
@@ -33,34 +34,17 @@ def get_website():
 
     school_url = ""
 
-    school_details = soup.find(class_="module info-block info-block--details")
+    school_details = soup.find(class_="govuk-summary-list")
+
+    # print(school_details)
 
     if school_details is None:
         return school_url
 
-    num = 0
-    for school in school_details.find_all(["span"]):
+    for school in school_details.find_all(["dd"]):
 
-        if school.text == "Type":
-            num = 1
-            continue
-        elif school.text == "Religious character":
-            num = 2
-            continue
-        elif school.text == "Local authority":
-            num = 3
-            continue
-        elif school.text == "Region":
-            num = 4
-            continue
-        elif school.text == "Website":
-            num = 5
-            continue
-
-        if num in range(1, 4):
-            pass
-        elif num == 5:
-            school_url = school.text
+        if "http" in school.text:
+            school_url = school.text.replace("(opens in new tab)", "").strip()
             break
 
     return school_url
@@ -72,6 +56,11 @@ def main():
     for f in ["england_ks2final.csv", "england_ks4final.csv", "england_ks5final.csv"]:
         df = pd.read_csv(f, engine="python")
 
+        if "WEB" in df.columns:
+            web_col = True
+        else:
+            web_col = False
+ 
         website = []
 
         n = 0
@@ -82,17 +71,42 @@ def main():
             urn = df["URN"][r]
             sch = df["SCHNAME"][r]
 
-            ofsted_url = "http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/" + str(urn).split(".")[0]
-            print(sch, ofsted_url)
+            ofsted_url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/" + \
+                         str(urn).split(".")[0]
 
-            url_found = get_school_url(ofsted_url)
-            if not url_found:
-                website.append("")
-                print("*** Not Found ***")
+            if web_col:
+                u = str(df["WEB"][r])
+                if u == "nan":
+                    print(sch, ofsted_url)
+
+                    url_found = get_school_url(ofsted_url)
+                    if not url_found:
+                        website.append("")
+                        print("*** Not Found ***")
+                    else:
+                        web = get_website()
+                        website.append(web)
+                        print(urn, web)
+
+                    time.sleep(2)
+
+                else:
+
+                    website.append(u)
+                    print(urn, u)
+
             else:
-                web = get_website()
-                website.append(web)
-                print(urn, web)
+
+                print(sch, ofsted_url)
+
+                url_found = get_school_url(ofsted_url)
+                if not url_found:
+                    website.append("")
+                    print("*** Not Found ***")
+                else:
+                    web = get_website()
+                    website.append(web)
+                    print(urn, web)
 
         df["WEB"] = website
         df.to_csv(f, index=False, encoding="utf-8")
