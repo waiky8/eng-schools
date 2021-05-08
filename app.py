@@ -36,15 +36,15 @@ READ CSV FILES
 ==============
 '''
 
-df_pri = pd.read_csv("england_ks2final.csv")
-df_sec = pd.read_csv("england_ks4final.csv")
-df_p16 = pd.read_csv("england_ks5final.csv")
-df_eng_avg = pd.read_csv("england_gcse_alevel_averages.csv")
+# df_pri = pd.read_csv("england_ks2final.csv")
+# df_sec = pd.read_csv("england_ks4final.csv")
+# df_p16 = pd.read_csv("england_ks5final.csv")
+# df_eng_avg = pd.read_csv("england_gcse_alevel_averages.csv")
 
-# df_pri = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks2final.csv?raw=true")
-# df_sec = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks4final.csv?raw=true")
-# df_p16 = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks5final.csv?raw=true")
-# df_eng_avg = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_gcse_alevel_averages.csv?raw=true")
+df_pri = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks2final.csv?raw=true")
+df_sec = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks4final.csv?raw=true")
+df_p16 = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_ks5final.csv?raw=true")
+df_eng_avg = pd.read_csv("https://github.com/waiky8/eng-schools/blob/main/england_gcse_alevel_averages.csv?raw=true")
 
 '''
 ======================
