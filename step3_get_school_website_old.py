@@ -5,9 +5,9 @@ import datetime
 import time
 
 '''
-==================
-ADD OFSTED COLUMNS
-==================
+=========================
+ADD SCHOOL WEBSITE COLUMN
+=========================
 '''
 
 
@@ -28,25 +28,42 @@ def get_school_url(url):
     return url_exist
 
 
-def get_rating():
+def get_website():
     global soup
 
-    inspect_date = ''
-    rating = ''
+    school_url = ''
 
-    school_details = soup.find(class_='timeline')
+    school_details = soup.find(class_='module info-block info-block--details')
 
-    for s in school_details.find_all(['time', 'strong']):
-        if s.name == 'time':
-            inspect_date = str(datetime.datetime.strptime(s.text, '%d %B %Y'))[:10].replace('-', '')
-        elif s.name == 'strong':
-            rating = s.text
+    if school_details is None:
+        return school_url
+
+    num = 0
+    for school in school_details.find_all(['span']):
+
+        if school.text == 'Type':
+            num = 1
+            continue
+        elif school.text == 'Religious character':
+            num = 2
+            continue
+        elif school.text == 'Local authority':
+            num = 3
+            continue
+        elif school.text == 'Region':
+            num = 4
+            continue
+        elif school.text == 'Website':
+            num = 5
+            continue
+
+        if num in range(1, 4):
+            pass
+        elif num == 5:
+            school_url = school.text
             break
 
-    if rating == '':
-        inspect_date = ''
-
-    return inspect_date, rating
+    return school_url
 
 
 def main():
@@ -55,8 +72,7 @@ def main():
     for f in ['england_ks2final.csv', 'england_ks4final.csv', 'england_ks5final.csv']:
         df = pd.read_csv(f, engine='python')
 
-        ofsted_rating = []
-        inspect_date = []
+        website = []
 
         n = 0
         for r in range(0, len(df)):
@@ -71,17 +87,14 @@ def main():
 
             url_found = get_school_url(ofsted_url)
             if not url_found:
-                ofsted_rating.append('')
-                inspect_date.append('')
+                website.append('')
                 print('*** Not Found ***')
             else:
-                insp_date, rating = get_rating()
-                ofsted_rating.append(rating)
-                inspect_date.append(insp_date)
-                print(urn, insp_date, rating)
+                web = get_website()
+                website.append(web)
+                print(urn, web)
 
-        df['OFSTEDRATING'] = ofsted_rating
-        df['INSPECTIONDT'] = inspect_date
+        df['WEB'] = website
         df.to_csv(f, index=False, encoding='utf-8')
 
     elapsed_time = time.time() - start_time
