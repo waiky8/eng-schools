@@ -58,9 +58,7 @@ def main():
         ofsted_rating = []
         inspect_date = []
 
-        n = 0
-        for r in range(0, len(df)):
-            n += 1
+        for n, r in enumerate(range(0, len(df)), start=1):
             print(f, ': ', n, '>>>>>>')
 
             urn = df['URN'][r]
