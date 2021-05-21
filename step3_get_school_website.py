@@ -60,11 +60,14 @@ def main():
             web_col = True
         else:
             web_col = False
- 
+
+        tot_rows = df.shape[0]
         website = []
 
         for n, r in enumerate(range(0, len(df)), start=1):
-            print(f, ': ', n, '>>>>>>')
+            elapsed_time = time.time() - start_time
+            print('-' * 80)
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, '[', n, '/', tot_rows, ']')
 
             urn = df['URN'][r]
             sch = df['SCHNAME'][r]
@@ -108,9 +111,6 @@ def main():
 
         df['WEB'] = website
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 if __name__ == '__main__':

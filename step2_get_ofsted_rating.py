@@ -55,16 +55,20 @@ def main():
     for f in ['england_ks2final.csv', 'england_ks4final.csv', 'england_ks5final.csv']:
         df = pd.read_csv(f, engine='python')
 
+        tot_rows = df.shape[0]
         ofsted_rating = []
         inspect_date = []
 
         for n, r in enumerate(range(0, len(df)), start=1):
-            print(f, ': ', n, '>>>>>>')
+            elapsed_time = time.time() - start_time
+            print('-'*80)
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, '[', n, '/', tot_rows, ']')
 
             urn = df['URN'][r]
             sch = df['SCHNAME'][r]
 
             ofsted_url = 'http://www.ofsted.gov.uk/oxedu_providers/full/(urn)/' + str(urn).split('.')[0]
+
             print(sch, ofsted_url)
 
             url_found = get_school_url(ofsted_url)
@@ -81,9 +85,6 @@ def main():
         df['OFSTEDRATING'] = ofsted_rating
         df['INSPECTIONDT'] = inspect_date
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 if __name__ == '__main__':

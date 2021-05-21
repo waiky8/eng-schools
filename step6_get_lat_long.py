@@ -17,28 +17,26 @@ def main():
     for f in ['england_ks2final.csv', 'england_ks4final.csv', 'england_ks5final.csv']:
         df = pd.read_csv(f)
 
+        tot_rows = df.shape[0]
         latitude = []
         longitude = []
 
-        for r in range(0, len(df)):
+        for n, r in enumerate(range(0, len(df)), start=1):
             urn = df['URN'][r]
             pcode = df['PCODE'][r]
 
-            print(r, urn, pcode)
             lat, long = get_coord(pcode)
 
             latitude.append(lat)
             longitude.append(long)
 
-            print(r, pcode, lat, long)
+            elapsed_time = time.time() - start_time
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, '[', n, '/', tot_rows, ']', urn, pcode, lat, long)
 
         df['LATITUDE'] = latitude
         df['LONGITUDE'] = longitude
 
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 def get_coord(pcode):

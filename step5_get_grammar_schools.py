@@ -18,20 +18,19 @@ def main():
 
         df = pd.read_csv(f)
 
+        tot_rows = df.shape[0]
         grammar = []
 
-        for r in range(0, len(df)):
+        for n, r in enumerate(range(0, len(df)), start=1):
             urn = str(df['URN'][r]).split('.')[0]
             g = get_grammar(urn)
             grammar.append(g)
 
-            print(r, urn, g)
+            elapsed_time = time.time() - start_time
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, '[', n, '/', tot_rows, ']', urn, g)
 
         df['GRAMMAR'] = grammar
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 def get_grammar(urn):

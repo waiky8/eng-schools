@@ -19,10 +19,11 @@ def main():
         if {'COLOUR'}.issubset(df.columns):
             df.drop('COLOUR', inplace=True, axis=1)
 
+        tot_rows = df.shape[0]
         colour1 = []
         colour2 = []
 
-        for r in range(0, len(df)):
+        for n, r in enumerate(range(0, len(df)), start=1):
 
             ofsted = df['OFSTEDRATING'][r]
 
@@ -47,14 +48,12 @@ def main():
             colour1.append(c1)
             colour2.append(c2)
 
-            print(r, ofsted, '>', c1, c2)
+            elapsed_time = time.time() - start_time
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, '[', n, '/', tot_rows, ']', ofsted, '>', c1, c2)
 
         df['COLOUR1'] = colour1
         df['COLOUR2'] = colour2
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 if __name__ == '__main__':

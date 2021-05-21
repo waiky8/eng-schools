@@ -15,9 +15,10 @@ def main():
     for f in ['england_ks2final.csv', 'england_ks4final.csv', 'england_ks5final.csv']:
         df = pd.read_csv(f)
 
+        tot_rows = df.shape[0]
         district = []
 
-        for r in range(0, len(df)):
+        for n, r in enumerate(range(0, len(df)), start=1):
             postcode = df['PCODE'][r]
 
             try:
@@ -29,13 +30,11 @@ def main():
                 district.append(d)
                 print(e)
 
-            print(r, postcode, d)
+            elapsed_time = time.time() - start_time
+            print(datetime.timedelta(seconds=elapsed_time), ":", f, "[", n, "/", tot_rows, "]", postcode, d)
 
         df['PCODE2'] = district
         df.to_csv(f, index=False, encoding='utf-8')
-
-    elapsed_time = time.time() - start_time
-    print('\n', datetime.timedelta(seconds=elapsed_time))
 
 
 if __name__ == '__main__':
