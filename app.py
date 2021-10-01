@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from configparser import ConfigParser
-from datetime import datetime
 
 '''
 ===========
@@ -52,7 +51,7 @@ PARAMETERS & VARIABLES
 ======================
 '''
 
-# New rows used to display blank row in datatable if no rows meet selected criteria - otherwise header is malformed
+# New rows used to display blank row in datatable if no rows meet selected criteria - orevent malformed header
 new_row_pri = {'RECTYPE': '', 'URN': '', 'SCHNAME': '', 'PCODE': '', 'PCODE2': '', 'TOWN': '', 'READPROG': '',
                'READPROG_DESCR': '', 'WRITPROG': '', 'WRITPROG_DESCR': '', 'MATPROG': '', 'MATPROG_DESCR': '',
                'OFSTEDRATING': '', 'INSPECTIONDT': '', 'WEB': '', 'SCHTYPE': '', 'GENDER': '', 'RELIGION': ''}
@@ -85,7 +84,7 @@ edu_list = ['Primary', 'Secondary', 'Post16']
 ratings_list = ['Outstanding', 'Good', 'Satisfactory', 'Requires Improvement', 'Inadequate']
 
 datatable_rows = 10
-fontsize = 12
+fontsize = 10
 
 textcol = 'dimgrey'
 bgcol = 'white'
@@ -96,30 +95,30 @@ col_3 = 'mediumslateblue'
 col_4 = 'slateblue'
 col_5 = 'navy'
 
-star = '⭐'  # used for ratings display '👨‍🎓'
+star = '🔵'  # used for ratings display '⭐👨‍🎓'
 
-# Markdown tables used for tooltips
-markdown_table = f'''
-|Star|Rating|
-|:-------------|:-------------|
-|{star * 5}| Well Above Average|
-|{star * 4}| Above Average|
-|{star * 3}| Average|
-|{star * 2}| Below Average|
-|{star * 1}| Well Below Average|
-'''
-
-markdown_table2 = '''
-|Abbr|Meaning|
-|:-------------|:-------------|
-|LOWCONV| Low Coverage|
-|NA| Not Applicable|
-|NE| No Entries|
-|NEW| New School|
-|NP| Not Published|
-|SP| Small Percentage|
-|SUPP| Suppressed|
-'''
+# # Markdown tables used for tooltips
+# markdown_table = f'''
+# |Star|Rating|
+# |:-------------|:-------------|
+# |{star * 5}| Well Above Average|
+# |{star * 4}| Above Average|
+# |{star * 3}| Average|
+# |{star * 2}| Below Average|
+# |{star * 1}| Well Below Average|
+# '''
+#
+# markdown_table2 = '''
+# |Abbr|Meaning|
+# |:-------------|:-------------|
+# |LOWCONV| Low Coverage|
+# |NA| Not Applicable|
+# |NE| No Entries|
+# |NEW| New School|
+# |NP| Not Published|
+# |SP| Small Percentage|
+# |SUPP| Suppressed|
+# '''
 
 '''
 ===================
@@ -131,66 +130,10 @@ app.layout = html.Div(
     [
         html.Div(
             [
-                html.H1('ENG Schools'),
-                html.H3('(2018/19)')
+                html.H3('ENG Schools'),
+                html.H5('(2018/19)')
             ],
             style={'text-align': 'center', 'font-weight': 'bold'}
-        ),
-
-        html.Br(),
-
-        html.Div(
-            dbc.Col(
-                [
-                    html.P('Filters:'),
-
-                    dcc.Dropdown(
-                        id='school_drop',
-                        options=[{'label': i, 'value': i} for i in school_list],
-                        multi=True,
-                        placeholder='Select School'
-                    ),
-
-                    html.Br(),
-
-                    dcc.Dropdown(
-                        id='edu_drop',
-                        options=[{'label': i, 'value': i} for i in edu_list],
-                        multi=True,
-                        placeholder='Select Education Phase'
-                    ),
-
-                    html.Br(),
-
-                    dcc.Dropdown(
-                        id='ratings_drop',
-                        options=[{'label': i, 'value': i} for i in ratings_list],
-                        multi=True,
-                        placeholder='Select Ofsted Rating'
-                    ),
-
-                    html.Br(),
-
-                    dcc.Dropdown(
-                        id='town_drop',
-                        options=[{'label': i, 'value': i} for i in town_list],
-                        multi=True,
-                        placeholder='Select Town'
-                    ),
-
-                    html.Br(),
-
-                    dcc.Dropdown(
-                        id='postcode_drop',
-                        options=[{'label': i, 'value': i} for i in postcode_list],
-                        multi=True,
-                        placeholder='Select Postcode District',
-                        # style={'font-size': fontsize, 'color': 'black', 'background-color': bgcol2}
-                    ),
-
-                    html.Br(),
-                ], style={'background-color': bgcol2}
-            ), style={'padding': '0px 18px 0px 18px'}
         ),
 
         html.Br(),
@@ -199,7 +142,88 @@ app.layout = html.Div(
             [
                 dbc.Col(
                     [
-                        html.P('School Type:'),
+                        html.Br(),
+
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        dcc.Dropdown(
+                                            id='school_drop',
+                                            options=[{'label': i, 'value': i} for i in school_list],
+                                            multi=True,
+                                            placeholder='School'
+                                        ),
+                                    ]
+                                ),
+
+                                dbc.Col(
+                                    [
+                                        dcc.Dropdown(
+                                            id='edu_drop',
+                                            options=[{'label': i, 'value': i} for i in edu_list],
+                                            multi=True,
+                                            placeholder='Education Phase'
+                                        ),
+                                    ]
+                                ),
+
+                                dbc.Col(
+                                    [
+                                        dcc.Dropdown(
+                                            id='ratings_drop',
+                                            options=[{'label': i, 'value': i} for i in ratings_list],
+                                            multi=True,
+                                            placeholder='Ofsted Rating'
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+
+                        html.Br(),
+
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        dcc.Dropdown(
+                                            id='town_drop',
+                                            options=[{'label': i, 'value': i} for i in town_list],
+                                            multi=True,
+                                            placeholder='Town'
+                                        ),
+                                    ]
+                                ),
+
+                                dbc.Col(
+                                    [
+                                        dcc.Dropdown(
+                                            id='postcode_drop',
+                                            options=[{'label': i, 'value': i} for i in postcode_list],
+                                            multi=True,
+                                            placeholder='Postcode District',
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+
+                        html.Br(),
+                    ], style={'font-size': fontsize, 'background-color': bgcol2}
+                )
+            ], style={'padding': '0px 20px 0px 20px'}
+        ),
+
+        html.Div(
+            [
+                dbc.Col(
+                    [
+                        dbc.Row(
+                            [
+                                html.P('School Type:')
+                            ], style={'font-size': fontsize, 'font-weight': 'bold', 'text-align': 'right'},
+                        ),
 
                         dbc.Row(
                             [
@@ -255,7 +279,7 @@ app.layout = html.Div(
                                 )
                             ]
                         )
-                    ], style={'background-color': bgcol2}
+                    ], style={'font-size': fontsize, 'background-color': bgcol2}
                 )
             ], style={'padding': '0px 20px 0px 20px'}
         ),
@@ -275,31 +299,17 @@ app.layout = html.Div(
         html.Br(), html.Br(),
 
         html.Div(
-            html.H6('* hover over table headings for legend'),
-            style={'text-align': 'left', 'font-style': 'italic', 'padding': '0px 0px 0px 20px'}
-        ),
-
-        html.Div(
             [
-                html.Div(
+                dbc.Row(
                     [
-                        html.Br(),
-
-                        dbc.Row(
-                            [
-                                dbc.Col(html.H3('PRIMARY'), style={'text-align': 'center'}),
-                                dbc.Col(html.H4('Total: '), style={'text-align': 'right'}),
-                                dbc.Col(html.H4(pri_recs), id='pri_recs', style={'text-align': 'left'})
-                            ]
-                        ),
-
-                        html.Br()
-                    ], style={'color': 'white', 'background': col_5}
-                )
+                        dbc.Col(html.P('PRIMARY'),
+                                style={'font-size': 20, 'font-weight': 'bold', 'text-align': 'right'}),
+                        dbc.Col(html.P(pri_recs), id='pri_recs',
+                                style={'font-size': 16, 'text-align': 'left'}),
+                    ]
+                ),
             ], style={'padding': '0px 20px 0px 20px'}
         ),
-
-        html.Br(),
 
         html.Div(
             [
@@ -376,77 +386,51 @@ app.layout = html.Div(
                             }
                         ],
 
-                        sort_action='native',
-                        sort_mode='single',
-                        filter_action='none',
-                        page_action='native',
-                        page_current=0,
-                        page_size=datatable_rows,
-                        fixed_rows={'headers': True},
-                        fixed_columns={'headers': True, 'data': 1},
-
-                        style_table={
-                            'overflowX': 'auto',
-                            'minWidth': '100%',
-                            'height': '800px'
-                        },
-
-                        style_header={
-                            'bold': True,
-                            'color': 'black',
-                            'backgroundColor': bgcol2,
+                        style_data={
                             'whiteSpace': 'normal',
-                            'height': '64px'
-                        },
-
-                        style_header_conditional=[
-                            {
-                                'if': {'column_id': col},
-                                'textDecoration': 'underline',
-                                'textDecorationStyle': 'dotted',
-                            } for col in ['READPROG_DESCR', 'WRITPROG_DESCR', 'MATPROG_DESCR']
-                        ],
-
-                        tooltip_header={
-                            'READPROG_DESCR': {'value': markdown_table, 'type': 'markdown'},
-                            'WRITPROG_DESCR': {'value': markdown_table, 'type': 'markdown'},
-                            'MATPROG_DESCR': {'value': markdown_table, 'type': 'markdown'}
-                        },
-
-                        tooltip_delay=0,
-                        tooltip_duration=None,
-
-                        style_cell={
-                            'color': textcol,
-                            'backgroundColor': bgcol,
-                            'font-family': 'Verdana',
-                            'font_size': fontsize,
-                            'overflow': 'hidden',
-                            'textOverflow': 'ellipsis',
-                            'minWidth': 88,
-                            'maxWidth': 320,
-                            'padding': '0px 10px 0px 10px'
+                            'height': 'auto',
+                            'width': '100px',
+                            'maxWidth': '100px',
+                            'minWidth': '100px',
                         },
 
                         style_cell_conditional=[
                             {'if': {'column_id': 'SCHNAME'}, 'textAlign': 'left'},
-                            {'if': {'column_id': 'READPROG_DESCR'}, 'textAlign': 'left'},
-                            {'if': {'column_id': 'WRITPROG_DESCR'}, 'textAlign': 'left'},
-                            {'if': {'column_id': 'MATPROG_DESCR'}, 'textAlign': 'left'},
                             {'if': {'column_id': 'OFSTEDRATING'}, 'textAlign': 'center'},
                             {'if': {'column_id': 'INSPECTIONDT'}, 'textAlign': 'center'},
                             {'if': {'column_id': 'URN'}, 'textAlign': 'center'},
-                            {'if': {'column_id': 'SCHTYPE'}, 'textAlign': 'left'},
+                            {'if': {'column_id': 'SCHTYPE'}, 'textAlign': 'center'},
+                            {'if': {'column_id': 'GENDER'}, 'textAlign': 'center'},
+                            {'if': {'column_id': 'RELIGION'}, 'textAlign': 'left'},
                             {'if': {'column_id': 'TOWN'}, 'textAlign': 'left'},
                             {'if': {'column_id': 'PCODE'}, 'textAlign': 'left'},
                         ],
 
-                        style_data={
-                            'whiteSpace': 'normal',
-                            'height': 'auto'
+                        style_table={'overflowX': 'auto'},
+
+                        style_cell={
+                            'fontSize': 10,
+                            'padding': '0px 5px 0px 5px'
                         },
 
-                        css=[{'selector': '.row', 'rule': 'margin: 0; flex-wrap: nowrap'}],
+                        page_size=datatable_rows,
+
+                        # style_header_conditional=[
+                        #     {
+                        #         'if': {'column_id': col},
+                        #         'textDecoration': 'underline',
+                        #         'textDecorationStyle': 'dotted',
+                        #     } for col in ['READPROG_DESCR', 'WRITPROG_DESCR', 'MATPROG_DESCR']
+                        # ],
+                        #
+                        # tooltip_header={
+                        #     'READPROG_DESCR': {'value': markdown_table, 'type': 'markdown'},
+                        #     'WRITPROG_DESCR': {'value': markdown_table, 'type': 'markdown'},
+                        #     'MATPROG_DESCR': {'value': markdown_table, 'type': 'markdown'}
+                        # },
+                        #
+                        # tooltip_delay=0,
+                        # tooltip_duration=None,
                     )
                 )
             ], style={'padding': '0px 20px 0px 20px'}
@@ -456,25 +440,16 @@ app.layout = html.Div(
 
         html.Div(
             [
-                html.Div(
+                dbc.Row(
                     [
-                        html.Br(),
-
-                        dbc.Row(
-                            [
-                                dbc.Col(html.H3('SECONDARY'), style={'text-align': 'center'}),
-                                dbc.Col(html.H4('Total: '), style={'text-align': 'right'}),
-                                dbc.Col(html.H4(sec_recs), id='sec_recs', style={'text-align': 'left'})
-                            ]
-                        ),
-
-                        html.Br()
-                    ], style={'color': 'white', 'background': col_5}
-                )
+                        dbc.Col(html.P('SECONDARY'),
+                                style={'font-size': 20, 'font-weight': 'bold', 'text-align': 'right'}),
+                        dbc.Col(html.P(sec_recs), id='sec_recs',
+                                style={'font-size': 16, 'text-align': 'left'}),
+                    ]
+                ),
             ], style={'padding': '0px 20px 0px 20px'}
         ),
-
-        html.Br(),
 
         dbc.Row(
             [
@@ -655,66 +630,16 @@ app.layout = html.Div(
                             }
                         ],
 
-                        sort_action='native',
-                        sort_mode='single',
-                        filter_action='none',
-                        page_action='native',
-                        page_current=0,
-                        page_size=datatable_rows,
-                        fixed_rows={'headers': True},
-                        fixed_columns={'headers': True, 'data': 1},
-
-                        style_table={
-                            'overflowX': 'auto', 'overflowY': 'auto',
-                            'minWidth': '100%',
-                            'height': '800px'},
-
-                        style_header={
-                            'bold': True,
-                            'color': 'black',
-                            'backgroundColor': bgcol2,
+                        style_data={
                             'whiteSpace': 'normal',
-                            'height': '64px'
-                        },
-
-                        style_header_conditional=[
-                            {
-                                'if': {'column_id': col},
-                                'textDecoration': 'underline',
-                                'textDecorationStyle': 'dotted'
-                            } for col in
-                            ['P8_BANDING', 'P8MEA', 'ATT8SCR', 'PTL2BASICS_95', 'PTEBACC_E_PTQ_EE', 'EBACCAPS']
-                        ],
-
-                        tooltip_header={
-                            'P8_BANDING': {'value': markdown_table, 'type': 'markdown'},
-                            'P8MEA': {'value': markdown_table2, 'type': 'markdown'},
-                            'ATT8SCR': {'value': markdown_table2, 'type': 'markdown'},
-                            'PTL2BASICS_95': {'value': markdown_table2, 'type': 'markdown'},
-                            'PTEBACC_E_PTQ_EE': {'value': markdown_table2, 'type': 'markdown'},
-                            'EBACCAPS': {'value': markdown_table2, 'type': 'markdown'},
-                        },
-
-                        tooltip_delay=0,
-                        tooltip_duration=None,
-
-                        style_cell={
-                            'color': textcol,
-                            'backgroundColor': bgcol,
-                            'font-family': 'Verdana',
-                            'font_size': fontsize,
-                            'overflow': 'hidden',
-                            'textOverflow': 'ellipsis',
-                            'minWidth': 88,
-                            'maxWidth': 320,
-                            'padding': '0px 10px 0px 10px'
+                            'height': 'auto',
+                            'width': '100px',
+                            'maxWidth': '100px',
+                            'minWidth': '100px',
                         },
 
                         style_cell_conditional=[
                             {'if': {'column_id': 'SCHNAME'},
-                             'textAlign': 'left'
-                             },
-                            {'if': {'column_id': 'P8_BANDING'},
                              'textAlign': 'left'
                              },
                             {'if': {'column_id': 'P8MEA'},
@@ -749,10 +674,16 @@ app.layout = html.Div(
                              'textAlign': 'center'
                              },
                             {'if': {'column_id': 'SCHTYPE'},
-                             'textAlign': 'left'
+                             'textAlign': 'center'
                              },
                             {'if': {'column_id': 'GRAMMAR'},
                              'textAlign': 'center'
+                             },
+                            {'if': {'column_id': 'GENDER'},
+                             'textAlign': 'center'
+                             },
+                            {'if': {'column_id': 'RELIGION'},
+                             'textAlign': 'left'
                              },
                             {'if': {'column_id': 'TOWN'},
                              'textAlign': 'left'
@@ -762,12 +693,35 @@ app.layout = html.Div(
                              },
                         ],
 
-                        style_data={
-                            'whiteSpace': 'normal',
-                            'height': 'auto'
+                        style_table={'overflowX': 'auto'},
+
+                        style_cell={
+                            'fontSize': 10,
+                            'padding': '0px 5px 0px 5px'
                         },
 
-                        css=[{'selector': '.row', 'rule': 'margin: 0; flex-wrap: nowrap'}],
+                        page_size=datatable_rows,
+
+                        # style_header_conditional=[
+                        #     {
+                        #         'if': {'column_id': col},
+                        #         'textDecoration': 'underline',
+                        #         'textDecorationStyle': 'dotted'
+                        #     } for col in
+                        #     ['P8_BANDING', 'P8MEA', 'ATT8SCR', 'PTL2BASICS_95', 'PTEBACC_E_PTQ_EE', 'EBACCAPS']
+                        # ],
+                        #
+                        # tooltip_header={
+                        #     'P8_BANDING': {'value': markdown_table, 'type': 'markdown'},
+                        #     'P8MEA': {'value': markdown_table2, 'type': 'markdown'},
+                        #     'ATT8SCR': {'value': markdown_table2, 'type': 'markdown'},
+                        #     'PTL2BASICS_95': {'value': markdown_table2, 'type': 'markdown'},
+                        #     'PTEBACC_E_PTQ_EE': {'value': markdown_table2, 'type': 'markdown'},
+                        #     'EBACCAPS': {'value': markdown_table2, 'type': 'markdown'},
+                        # },
+                        #
+                        # tooltip_delay=0,
+                        # tooltip_duration=None,
                     )
                 )
             ], style={'padding': '0px 20px 0px 20px'}
@@ -777,25 +731,16 @@ app.layout = html.Div(
 
         html.Div(
             [
-                html.Div(
+                dbc.Row(
                     [
-                        html.Br(),
-
-                        dbc.Row(
-                            [
-                                dbc.Col(html.H3('POST 16'), style={'text-align': 'center'}),
-                                dbc.Col(html.H4('Total: '), style={'text-align': 'right'}),
-                                dbc.Col(html.H4(p16_recs), id='p16_recs', style={'text-align': 'left'})
-                            ]
-                        ),
-
-                        html.Br()
-                    ], style={'color': 'white', 'background': col_5}
-                )
+                        dbc.Col(html.P('POST 16'),
+                                style={'font-size': 20, 'font-weight': 'bold', 'text-align': 'right'}),
+                        dbc.Col(html.P(p16_recs), id='p16_recs',
+                                style={'font-size': 16, 'text-align': 'left'}),
+                    ]
+                ),
             ], style={'padding': '0px 20px 0px 20px'}
         ),
-
-        html.Br(),
 
         dbc.Row(
             [
@@ -919,63 +864,16 @@ app.layout = html.Div(
                             }
                         ],
 
-                        sort_action='native',
-                        sort_mode='single',
-                        filter_action='none',
-                        page_action='native',
-                        page_current=0,
-                        page_size=datatable_rows,
-                        fixed_rows={'headers': True},
-                        fixed_columns={'headers': True, 'data': 1},
-
-                        style_table={
-                            'overflowX': 'auto', 'overflowY': 'auto',
-                            'minWidth': '100%',
-                            'height': '800px'
-                        },
-
-                        style_header={
-                            'bold': True,
-                            'color': 'black',
-                            'backgroundColor': bgcol2,
+                        style_data={
                             'whiteSpace': 'normal',
-                            'height': '64px'
-                        },
-
-                        style_header_conditional=[
-                            {
-                                'if': {'column_id': col},
-                                'textDecoration': 'underline',
-                                'textDecorationStyle': 'dotted',
-                            } for col in ['PROGRESS_BAND_ALEV', 'TALLPPEGRD_ALEV_1618', 'TALLPPE_ALEV_1618']
-                        ],
-
-                        tooltip_header={
-                            'PROGRESS_BAND_ALEV': {'value': markdown_table, 'type': 'markdown'},
-                            'TALLPPEGRD_ALEV_1618': {'value': markdown_table2, 'type': 'markdown'},
-                            'TALLPPE_ALEV_1618': {'value': markdown_table2, 'type': 'markdown'}
-                        },
-
-                        tooltip_delay=0,
-                        tooltip_duration=None,
-
-                        style_cell={
-                            'color': textcol,
-                            'backgroundColor': bgcol,
-                            'font-family': 'Verdana',
-                            'font_size': fontsize,
-                            'overflow': 'hidden',
-                            'textOverflow': 'ellipsis',
-                            'minWidth': 88,
-                            'maxWidth': 320,
-                            'padding': '0px 10px 0px 10px'
+                            'height': 'auto',
+                            'width': '100px',
+                            'maxWidth': '100px',
+                            'minWidth': '100px',
                         },
 
                         style_cell_conditional=[
                             {'if': {'column_id': 'SCHNAME'},
-                             'textAlign': 'left'
-                             },
-                            {'if': {'column_id': 'PROGRESS_BAND_ALEV'},
                              'textAlign': 'left'
                              },
                             {'if': {'column_id': 'TALLPPEGRD_ALEV_1618'},
@@ -998,10 +896,16 @@ app.layout = html.Div(
                              'textAlign': 'center'
                              },
                             {'if': {'column_id': 'SCHTYPE'},
-                             'textAlign': 'left'
+                             'textAlign': 'center'
                              },
                             {'if': {'column_id': 'GRAMMAR'},
                              'textAlign': 'center'
+                             },
+                            {'if': {'column_id': 'GENDER'},
+                             'textAlign': 'center'
+                             },
+                            {'if': {'column_id': 'RELIGION'},
+                             'textAlign': 'left'
                              },
                             {'if': {'column_id': 'TOWN'},
                              'textAlign': 'left'
@@ -1011,12 +915,31 @@ app.layout = html.Div(
                              },
                         ],
 
-                        style_data={
-                            'whiteSpace': 'normal',
-                            'height': 'auto'
+                        style_table={'overflowX': 'auto'},
+
+                        style_cell={
+                            'fontSize': 10,
+                            'padding': '0px 5px 0px 5px'
                         },
 
-                        css=[{'selector': '.row', 'rule': 'margin: 0; flex-wrap: nowrap'}],
+                        page_size=datatable_rows,
+
+                        # style_header_conditional=[
+                        #     {
+                        #         'if': {'column_id': col},
+                        #         'textDecoration': 'underline',
+                        #         'textDecorationStyle': 'dotted',
+                        #     } for col in ['PROGRESS_BAND_ALEV', 'TALLPPEGRD_ALEV_1618', 'TALLPPE_ALEV_1618']
+                        # ],
+                        #
+                        # tooltip_header={
+                        #     'PROGRESS_BAND_ALEV': {'value': markdown_table, 'type': 'markdown'},
+                        #     'TALLPPEGRD_ALEV_1618': {'value': markdown_table2, 'type': 'markdown'},
+                        #     'TALLPPE_ALEV_1618': {'value': markdown_table2, 'type': 'markdown'}
+                        # },
+                        #
+                        # tooltip_delay=0,
+                        # tooltip_duration=None,
                     )
                 )
             ], style={'padding': '0px 20px 0px 20px'}
@@ -1025,24 +948,34 @@ app.layout = html.Div(
         html.Br(), html.Br(), html.Br(),
 
         html.Div(
-            html.P(
-                ['Data Source: ',
-                 html.A('GovUK',
-                        href='https://www.compare-school-performance.service.gov.uk/download-data', target='_blank'
-                        )
-                 ]
-            ),
-            style={'padding': '0px 0px 0px 50px'}
-        ),
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                html.P(
+                                    ['Data Source: ',
+                                     html.A('GovUK',
+                                            href='https://www.compare-school-performance.service.gov.uk/download-data',
+                                            target='_blank')
+                                     ], className='font-italic'
+                                ),
+                            ]
+                        ),
 
-        html.Div(
-            html.P(
-                ['Code: ',
-                 html.A('Github', href='https://github.com/waiky8/eng-schools',
-                        target='_blank')
-                 ]
-            ),
-            style={'padding': '0px 0px 0px 50px'}
+                        dbc.Col(
+                            [
+                                html.P(
+                                    ['Code: ',
+                                     html.A('Github', href='https://github.com/waiky8/eng-schools',
+                                            target='_blank')
+                                     ], className='font-italic text-right'
+                                ),
+                            ],
+                        ),
+                    ], style={'padding': '0px 20px 0px 20px'}
+                )
+            ]
         ),
 
         # dummy DIV to trigger average_scores callback
@@ -1085,8 +1018,6 @@ CALLBACK FOR DATATABLE & MAP
 )
 def return_datatable(selected_school, selected_edu, selected_ratings, selected_area, selected_postcode,
                      selected_schtype, selected_grammar, selected_gender, selected_religion):
-    # print(str(datetime.now()), '[1] start apply filters...')
-
     '''
     ---------
     DATATABLE
@@ -1167,11 +1098,16 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
         df1_sec = df1_sec[~df1_sec['RELIGION'].isin(['Does not apply', 'None', ''])]
         df1_p16 = df1_p16[~df1_p16['RELIGION'].isin(['Does not apply', 'None', ''])]
 
+    # Remove unwanted noise for missing performance data
+    for replace_txt in ['LOWCONV', 'NA', 'NEW', 'NE', 'NP', 'SP', 'SUPP']:
+        for replace_col in ['P8MEA', 'ATT8SCR', 'PTL2BASICS_95', 'PTEBACC_E_PTQ_EE', 'EBACCAPS']:
+            df1_sec[replace_col].replace(replace_txt, '', inplace=True)
+        for replace_col2 in ['TALLPPEGRD_ALEV_1618', 'TALLPPE_ALEV_1618']:
+            df1_p16[replace_col2].replace(replace_txt, '', inplace=True)
+
     df_pri_filtered = df1_pri.copy().sort_values(by=['SCHNAME'])
     df_sec_filtered = df1_sec.copy().sort_values(by=['SCHNAME'])
     df_p16_filtered = df1_p16.copy().sort_values(by=['SCHNAME'])
-
-    # print(str(datetime.now()), '[2] start map rating to stars...')
 
     if len(df_pri_filtered) == 0:
         pass
@@ -1284,7 +1220,7 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
             lat=df_all['LATITUDE'],
             lon=df_all['LONGITUDE'],
             mode='markers',
-            marker={'color': df_all['COLOUR1'], 'size': 14},
+            marker={'color': df_all['COLOUR1'], 'size': 10},
             name='',
             text=df_all['SCHNAME'],
             customdata=np.stack(
@@ -1323,13 +1259,11 @@ def return_datatable(selected_school, selected_edu, selected_ratings, selected_a
         ),
         hoverlabel=dict(
             bgcolor='white',
-            font_size=12,
+            font_size=fontsize,
             font_family='Rockwell'
         ),
         margin=dict(t=0, b=0, l=0, r=0)
     )
-
-    # print(str(datetime.now()), '[3] done...')
 
     return df_pri_updated, df_sec_updated, df_p16_updated, pri_rows, sec_rows, p16_rows, fig
 
