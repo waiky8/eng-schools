@@ -1,24 +1,21 @@
 # English Schools
 
-I was struggling to find a website where I can compare the ratings and performance of schools in England - ok there is the government one but I found it not so friendly to navigate. This is my attempt at bringing the Ofsted ratings and schools performance into one place that is not bloated with a million different pieces of information.<br><br>
+This application was written to show Ofsted ratings and school performance in one place. It covers all education levels - Primary (KS2), Secondary (KS4 GCSE) and Post 16 (KS5 A-Level).<br><br>
 
-Written in **Dash** that predominately uses **datatables** to show data for each of the 3 main phases of education (primary, secondary and post 16).<br><br>
+Written in **Dash** that utilises **datatables** to show data grouped by the 3 aforementioned educational phases.<br><br>
 
-**Mapbox** is used to show school locations with markers and hover text.
+**Mapbox** is used to show school locations that include additional information by way of hover textbox.
 
 Data is for academic year 2018/19, which can be updated easily in future (at time of writing this is the latest data available).<br><br>
 
 The application is uploaded to **Heroku**. Check out https://eng-schools.herokuapp.com/<br><br>
 
 # Features:
-  - Primary: reading, writing & maths performance
-  - Secondary: progress 8, attainment 8, eng/maths passes
-  - Post16: average A-level grade
-  - Comparison of performance against the national average for secondary and post 16<br><br>
-
-# Input options:
-- Select school name, education phase, ofsted rating, town and postcode
-- Filter by school type (academy, grammar, independent etc.) as well as gender & religion<br><br>
+- Interactive dashboard
+- Primary: reading, writing & maths performance
+- Secondary: progress 8, attainment 8, eng/maths pass rate
+- Post16: average A-level grade
+- Comparison of performance against the national average for secondary and post 16<br><br>
 
 # Description of code and files:
 - **app.py** - main code
