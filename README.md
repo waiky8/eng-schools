@@ -40,5 +40,3 @@ The application is uploaded to **Heroku**. Check out https://eng-schools.herokua
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot1.png)
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot2.png)
 ![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot3.png)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot4.png)
-![alt text](https://github.com/waiky8/eng-schools/blob/main/screenshot5.png)
